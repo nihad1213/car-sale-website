@@ -1,2 +1,352 @@
-<h1>Homepage#index</h1>
-<p>Find me in app/views/homepage/index.html.erb</p>
+<%# app/views/homepage/index.html.erb %>
+<%# Requires Bootstrap 5 CSS/JS in your layout. Bootstrap Icons are loaded below. %>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<%
+  # Sample data - replace with @cars from your controller
+  cars = [
+    { id: 1, title: "2021 BMW 3 Series 320i", year: 2021, price: 32500, mileage: 28000, fuel: "Petrol", transmission: "Automatic", location: "Baku", badge: "Featured" },
+    { id: 2, title: "2019 Toyota Camry SE", year: 2019, price: 21900, mileage: 54000, fuel: "Petrol", transmission: "Automatic", location: "Baku", badge: nil },
+    { id: 3, title: "2022 Tesla Model 3", year: 2022, price: 41800, mileage: 15000, fuel: "Electric", transmission: "Automatic", location: "Sumqayit", badge: "New" },
+    { id: 4, title: "2018 Mercedes-Benz C200", year: 2018, price: 27300, mileage: 71000, fuel: "Diesel", transmission: "Automatic", location: "Ganja", badge: nil },
+    { id: 5, title: "2020 Hyundai Tucson", year: 2020, price: 23400, mileage: 39000, fuel: "Petrol", transmission: "Automatic", location: "Baku", badge: nil },
+    { id: 6, title: "2017 Volkswagen Golf GTI", year: 2017, price: 18700, mileage: 82000, fuel: "Petrol", transmission: "Manual", location: "Baku", badge: "Price drop" },
+    { id: 7, title: "2023 Kia Sportage", year: 2023, price: 34900, mileage: 9000, fuel: "Hybrid", transmission: "Automatic", location: "Baku", badge: "New" },
+    { id: 8, title: "2016 Ford Mustang GT", year: 2016, price: 29500, mileage: 63000, fuel: "Petrol", transmission: "Manual", location: "Mingachevir", badge: nil }
+  ]
+  years = (Date.current.year).downto(2000).to_a
+  makes = %w[Audi BMW Ford Honda Hyundai Kia Mercedes-Benz Nissan Tesla Toyota Volkswagen]
+  body_types = %w[Sedan SUV Hatchback Coupe Wagon Pickup Van]
+%>
+
+<style>
+  .brand-logo { font-weight: 800; letter-spacing: -.5px; }
+  .brand-logo .bi { color: var(--bs-primary); }
+  .filter-bar { background: #fff; border-bottom: 1px solid var(--bs-border-color); }
+  .hero {
+    background: linear-gradient(135deg, #0d1b2a 0%, #1b3a5c 100%);
+    color: #fff;
+  }
+  .car-card { transition: transform .15s ease, box-shadow .15s ease; }
+  .car-card:hover { transform: translateY(-4px); box-shadow: 0 .75rem 1.5rem rgba(0,0,0,.12) !important; }
+  .car-card .car-img { height: 200px; object-fit: cover; }
+  .car-badge { position: absolute; top: .75rem; left: .75rem; }
+  .fav-btn { position: absolute; top: .5rem; right: .5rem; border-radius: 50%; width: 36px; height: 36px; padding: 0; }
+  .category-tile { transition: background .15s ease; }
+  .category-tile:hover { background: var(--bs-primary-bg-subtle); }
+</style>
+
+<!-- ============ HEADER ============ -->
+<header class="sticky-top bg-white shadow-sm">
+  <nav class="navbar navbar-expand-lg py-2">
+    <div class="container">
+      <!-- Logo -->
+      <a class="navbar-brand brand-logo fs-4 d-flex align-items-center gap-2" href="/">
+        <i class="bi bi-car-front-fill fs-3"></i>
+        <span>Auto<span class="text-primary">Market</span></span>
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+              aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="mainNav">
+        <!-- Search bar -->
+        <form class="d-flex flex-grow-1 mx-lg-4 my-3 my-lg-0" role="search" action="<%= request.path %>" method="get">
+          <div class="input-group">
+            <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+            <input type="search" name="q" class="form-control" placeholder="Search by make, model or keyword..."
+                   aria-label="Search cars" value="<%= params[:q] %>">
+            <button class="btn btn-primary" type="submit">Search</button>
+          </div>
+        </form>
+
+        <!-- Right side -->
+        <ul class="navbar-nav align-items-lg-center gap-lg-2">
+          <li class="nav-item">
+            <a class="nav-link" href="#"><i class="bi bi-heart me-1"></i>Saved</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-outline-primary" href="#"><i class="bi bi-plus-lg me-1"></i>Sell your car</a>
+          </li>
+          <!-- Profile icon -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle d-flex align-items-center gap-1" href="#" id="profileMenu"
+               role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person-circle fs-3"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="profileMenu">
+              <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>My profile</a></li>
+              <li><a class="dropdown-item" href="#"><i class="bi bi-card-list me-2"></i>My listings</a></li>
+              <li><a class="dropdown-item" href="#"><i class="bi bi-heart me-2"></i>Saved cars</a></li>
+              <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-in-right me-2"></i>Sign in</a></li>
+              <li><a class="dropdown-item" href="#"><i class="bi bi-person-plus me-2"></i>Register</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Filters -->
+  <div class="filter-bar">
+    <div class="container py-2">
+      <form action="<%= request.path %>" method="get" class="row g-2 align-items-end">
+        <div class="col-6 col-md-3 col-lg-2">
+          <label for="make" class="form-label small text-muted mb-1">Make</label>
+          <select id="make" name="make" class="form-select form-select-sm">
+            <option value="">Any make</option>
+            <% makes.each do |m| %>
+              <option value="<%= m %>" <%= "selected" if params[:make] == m %>><%= m %></option>
+            <% end %>
+          </select>
+        </div>
+
+        <div class="col-6 col-md-3 col-lg-2">
+          <label for="model" class="form-label small text-muted mb-1">Model</label>
+          <input type="text" id="model" name="model" class="form-control form-control-sm"
+                 placeholder="Any model" value="<%= params[:model] %>">
+        </div>
+
+        <div class="col-6 col-md-3 col-lg-2">
+          <label for="year_from" class="form-label small text-muted mb-1">Year</label>
+          <div class="input-group input-group-sm">
+            <select id="year_from" name="year_from" class="form-select">
+              <option value="">From</option>
+              <% years.each do |y| %>
+                <option value="<%= y %>" <%= "selected" if params[:year_from].to_s == y.to_s %>><%= y %></option>
+              <% end %>
+            </select>
+            <select name="year_to" class="form-select" aria-label="Year to">
+              <option value="">To</option>
+              <% years.each do |y| %>
+                <option value="<%= y %>" <%= "selected" if params[:year_to].to_s == y.to_s %>><%= y %></option>
+              <% end %>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-6 col-md-3 col-lg-2">
+          <label for="price_min" class="form-label small text-muted mb-1">Price ($)</label>
+          <div class="input-group input-group-sm">
+            <input type="number" id="price_min" name="price_min" class="form-control" placeholder="Min"
+                   min="0" step="500" value="<%= params[:price_min] %>">
+            <input type="number" name="price_max" class="form-control" placeholder="Max"
+                   min="0" step="500" value="<%= params[:price_max] %>" aria-label="Maximum price">
+          </div>
+        </div>
+
+        <div class="col-6 col-md-3 col-lg-1">
+          <label for="body_type" class="form-label small text-muted mb-1">Body</label>
+          <select id="body_type" name="body_type" class="form-select form-select-sm">
+            <option value="">Any</option>
+            <% body_types.each do |b| %>
+              <option value="<%= b %>" <%= "selected" if params[:body_type] == b %>><%= b %></option>
+            <% end %>
+          </select>
+        </div>
+
+        <div class="col-6 col-md-3 col-lg-1">
+          <label for="fuel" class="form-label small text-muted mb-1">Fuel</label>
+          <select id="fuel" name="fuel" class="form-select form-select-sm">
+            <option value="">Any</option>
+            <% %w[Petrol Diesel Hybrid Electric].each do |f| %>
+              <option value="<%= f %>" <%= "selected" if params[:fuel] == f %>><%= f %></option>
+            <% end %>
+          </select>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-2 d-flex gap-2">
+          <button type="submit" class="btn btn-primary btn-sm flex-grow-1">
+            <i class="bi bi-funnel me-1"></i>Filter
+          </button>
+          <a href="<%= request.path %>" class="btn btn-outline-secondary btn-sm" title="Reset filters">
+            <i class="bi bi-arrow-counterclockwise"></i>
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- ============ HERO ============ -->
+  <section class="hero py-5">
+    <div class="container py-lg-4">
+      <div class="row align-items-center">
+        <div class="col-lg-7">
+          <h1 class="display-5 fw-bold mb-3">Find your next car, <span class="text-warning">faster.</span></h1>
+          <p class="lead mb-4 text-white-50">
+            Browse thousands of verified listings from trusted dealers and private sellers.
+            Compare prices, check history and drive away happy.
+          </p>
+          <div class="d-flex flex-wrap gap-2">
+            <a href="#listings" class="btn btn-warning btn-lg px-4">Browse cars</a>
+            <a href="#" class="btn btn-outline-light btn-lg px-4">Sell your car</a>
+          </div>
+        </div>
+        <div class="col-lg-5 d-none d-lg-block">
+          <div class="row text-center g-3">
+            <div class="col-4"><div class="display-6 fw-bold">12k+</div><small class="text-white-50">Listings</small></div>
+            <div class="col-4"><div class="display-6 fw-bold">3k+</div><small class="text-white-50">Dealers</small></div>
+            <div class="col-4"><div class="display-6 fw-bold">98%</div><small class="text-white-50">Happy buyers</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ BROWSE BY BODY TYPE ============ -->
+  <section class="py-5">
+    <div class="container">
+      <h2 class="h4 fw-bold mb-4">Browse by body type</h2>
+      <div class="row row-cols-3 row-cols-md-4 row-cols-lg-7 g-3">
+        <% [["Sedan", "bi-car-front"], ["SUV", "bi-truck-front"], ["Hatchback", "bi-car-front-fill"],
+            ["Coupe", "bi-speedometer2"], ["Wagon", "bi-bus-front"], ["Pickup", "bi-truck"], ["Electric", "bi-lightning-charge"]].each do |name, icon| %>
+          <div class="col">
+            <a href="?body_type=<%= name %>" class="card category-tile border text-center text-decoration-none text-body h-100">
+              <div class="card-body py-3">
+                <i class="bi <%= icon %> fs-2 text-primary"></i>
+                <div class="small fw-semibold mt-1"><%= name %></div>
+              </div>
+            </a>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ LISTINGS ============ -->
+  <section id="listings" class="pb-5">
+    <div class="container">
+      <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+        <div>
+          <h2 class="h4 fw-bold mb-0">Latest listings</h2>
+          <small class="text-muted"><%= cars.size %> cars found</small>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <label for="sort" class="small text-muted mb-0">Sort by</label>
+          <select id="sort" name="sort" class="form-select form-select-sm w-auto">
+            <option>Newest first</option>
+            <option>Price: low to high</option>
+            <option>Price: high to low</option>
+            <option>Year: newest</option>
+            <option>Mileage: lowest</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4">
+        <% cars.each do |car| %>
+          <div class="col">
+            <div class="card car-card h-100 border-0 shadow-sm">
+              <div class="position-relative">
+                <img src="https://picsum.photos/seed/car<%= car[:id] %>/600/400"
+                     class="card-img-top car-img" alt="<%= car[:title] %>" loading="lazy">
+                <% if car[:badge] %>
+                  <span class="badge text-bg-primary car-badge"><%= car[:badge] %></span>
+                <% end %>
+                <button type="button" class="btn btn-light fav-btn shadow-sm" aria-label="Save to favorites">
+                  <i class="bi bi-heart"></i>
+                </button>
+              </div>
+
+              <div class="card-body">
+                <h3 class="h6 card-title mb-1"><%= car[:title] %></h3>
+                <p class="text-muted small mb-2"><i class="bi bi-geo-alt me-1"></i><%= car[:location] %></p>
+                <p class="fs-5 fw-bold text-primary mb-3"><%= number_to_currency(car[:price], precision: 0) %></p>
+
+                <ul class="list-unstyled small text-muted mb-0 row row-cols-2 g-1">
+                  <li class="col"><i class="bi bi-calendar3 me-1"></i><%= car[:year] %></li>
+                  <li class="col"><i class="bi bi-speedometer me-1"></i><%= number_with_delimiter(car[:mileage]) %> km</li>
+                  <li class="col"><i class="bi bi-fuel-pump me-1"></i><%= car[:fuel] %></li>
+                  <li class="col"><i class="bi bi-gear-wide-connected me-1"></i><%= car[:transmission] %></li>
+                </ul>
+              </div>
+
+              <div class="card-footer bg-white border-0 pt-0 pb-3">
+                <a href="#" class="btn btn-outline-primary btn-sm w-100">View details</a>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <!-- Pagination -->
+      <nav class="mt-5" aria-label="Listings pagination">
+        <ul class="pagination justify-content-center">
+          <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+          <li class="page-item active"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item"><a class="page-link" href="#">Next</a></li>
+        </ul>
+      </nav>
+    </div>
+  </section>
+
+  <!-- ============ WHY US ============ -->
+  <section class="bg-light py-5">
+    <div class="container">
+      <h2 class="h4 fw-bold text-center mb-5">Why buy with AutoMarket</h2>
+      <div class="row g-4 text-center">
+        <div class="col-md-4">
+          <i class="bi bi-shield-check display-5 text-primary"></i>
+          <h3 class="h6 fw-bold mt-3">Verified sellers</h3>
+          <p class="text-muted small mb-0">Every dealer and private seller is checked before listing.</p>
+        </div>
+        <div class="col-md-4">
+          <i class="bi bi-tags display-5 text-primary"></i>
+          <h3 class="h6 fw-bold mt-3">Transparent pricing</h3>
+          <p class="text-muted small mb-0">See price history and market comparisons for every car.</p>
+        </div>
+        <div class="col-md-4">
+          <i class="bi bi-headset display-5 text-primary"></i>
+          <h3 class="h6 fw-bold mt-3">Friendly support</h3>
+          <p class="text-muted small mb-0">Our team helps with inspections, paperwork and delivery.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="bg-dark text-white-50 pt-5 pb-4">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <a class="text-white fw-bold fs-5 text-decoration-none" href="/">
+          <i class="bi bi-car-front-fill text-primary me-1"></i>AutoMarket
+        </a>
+        <p class="small mt-2">The easiest way to buy and sell cars online.</p>
+      </div>
+      <div class="col-6 col-md-2">
+        <h6 class="text-white">Buy</h6>
+        <ul class="list-unstyled small">
+          <li><a href="#" class="link-secondary text-decoration-none">New cars</a></li>
+          <li><a href="#" class="link-secondary text-decoration-none">Used cars</a></li>
+          <li><a href="#" class="link-secondary text-decoration-none">Electric</a></li>
+        </ul>
+      </div>
+      <div class="col-6 col-md-2">
+        <h6 class="text-white">Sell</h6>
+        <ul class="list-unstyled small">
+          <li><a href="#" class="link-secondary text-decoration-none">List your car</a></li>
+          <li><a href="#" class="link-secondary text-decoration-none">Dealer tools</a></li>
+        </ul>
+      </div>
+      <div class="col-md-4">
+        <h6 class="text-white">Stay updated</h6>
+        <form class="input-group input-group-sm" action="#" method="post">
+          <input type="email" class="form-control" placeholder="Your email" aria-label="Email">
+          <button class="btn btn-primary" type="submit">Subscribe</button>
+        </form>
+      </div>
+    </div>
+    <hr class="border-secondary my-4">
+    <p class="small text-center mb-0">&copy; <%= Date.current.year %> AutoMarket. All rights reserved.</p>
+  </div>
+</footer>
