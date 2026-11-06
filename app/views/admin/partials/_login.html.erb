@@ -1,25 +1,108 @@
-<%= form_with url: admin_login_path, local: true do |f| %>
-  <% if flash[:alert] %>
-    <div class="alert alert-danger" role="alert">
-      <%= flash[:alert] %>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<style>
+  .login-page { min-height: 100vh; background: #f4f6fa; }
+  .login-aside {
+    background: linear-gradient(135deg, #0d1b2a 0%, #1b3a5c 100%);
+    color: #fff;
+  }
+  .login-aside .brand { font-weight: 800; letter-spacing: -.5px; font-size: 1.75rem; }
+  .login-card { max-width: 420px; width: 100%; }
+  .login-card .form-control { padding: .75rem .75rem; }
+  .login-card .input-group-text { background: #fff; }
+  .login-card .form-control:focus,
+  .login-card .btn-toggle:focus { box-shadow: none; border-color: var(--bs-primary); }
+</style>
+
+<div class="login-page container-fluid p-0">
+  <div class="row g-0 min-vh-100">
+
+    <div class="col-lg-6 d-none d-lg-flex login-aside align-items-center justify-content-center p-5">
+      <div style="max-width: 440px;">
+        <div class="brand mb-4">
+          <i class="bi bi-car-front-fill me-2"></i>RoR<span class="text-warning">Car</span>
+        </div>
+        <h1 class="display-6 fw-bold mb-3">Admin console</h1>
+        <p class="text-white-50 mb-4">
+          Manage listings, dealers and users from one place.
+        </p>
+        <ul class="list-unstyled text-white-50 mb-0">
+          <li class="mb-2"><i class="bi bi-check-circle-fill text-warning me-2"></i>Review and approve new listings</li>
+          <li class="mb-2"><i class="bi bi-check-circle-fill text-warning me-2"></i>Manage users and dealers</li>
+          <li><i class="bi bi-check-circle-fill text-warning me-2"></i>Track site activity</li>
+        </ul>
+      </div>
     </div>
-  <% end %>
 
-  <div class="form-group">
-    <%= f.label :email, "Email address", for: "exampleInputEmail1" %>
-    <%= f.email_field :email, class: "form-control", id: "exampleInputEmail1", required: true, aria: { describedby: "emailHelp" } %>
-    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+    <div class="col-lg-6 d-flex align-items-center justify-content-center p-4">
+      <div class="login-card">
+        <div class="text-center d-lg-none mb-4 fw-bold fs-3">
+          <i class="bi bi-car-front-fill text-primary me-1"></i>RoR<span class="text-primary">Car</span>
+        </div>
+
+        <div class="card border-0 shadow-sm">
+          <div class="card-body p-4 p-md-5">
+            <h2 class="h4 fw-bold mb-1">Welcome back</h2>
+            <p class="text-muted small mb-4">Sign in to access the admin dashboard.</p>
+
+            <%= form_with url: admin_login_path, local: true do |f| %>
+              <% if flash[:alert] %>
+                <div class="alert alert-danger d-flex align-items-center py-2 small" role="alert">
+                  <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                  <div><%= flash[:alert] %></div>
+                </div>
+              <% end %>
+
+              <div class="mb-3">
+                <%= f.label :email, "Email address", class: "form-label small fw-semibold" %>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                  <%= f.email_field :email, class: "form-control", placeholder: "you@example.com",
+                                    required: true, autofocus: true, autocomplete: "email" %>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <%= f.label :password, "Password", class: "form-label small fw-semibold" %>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                  <%= f.password_field :password, class: "form-control", placeholder: "••••••••",
+                                       required: true, autocomplete: "current-password", id: "password" %>
+                  <button class="btn btn-outline-secondary btn-toggle" type="button" id="togglePassword"
+                          aria-label="Show or hide password">
+                    <i class="bi bi-eye" id="togglePasswordIcon"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="form-check mb-4">
+                <%= f.check_box :remember_me, class: "form-check-input", id: "remember_me" %>
+                <%= f.label :remember_me, "Remember me", class: "form-check-label small", for: "remember_me" %>
+              </div>
+
+              <%= f.submit "Sign in", class: "btn btn-primary w-100 py-2 fw-semibold" %>
+            <% end %>
+          </div>
+        </div>
+
+        <p class="text-center text-muted small mt-4 mb-0">
+          &copy; <%= Date.current.year %> RoRCar. All rights reserved.
+        </p>
+      </div>
+    </div>
   </div>
+</div>
 
-  <div class="form-group">
-    <%= f.label :password, "Password", for: "exampleInputPassword1" %>
-    <%= f.password_field :password, class: "form-control", id: "exampleInputPassword1", required: true %>
-  </div>
-
-  <div class="form-group form-check">
-    <%= f.check_box :remember_me, class: "form-check-input", id: "exampleCheck1" %>
-    <%= f.label :remember_me, "Check me out", class: "form-check-label", for: "exampleCheck1" %>
-  </div>
-
-  <%= f.submit "Submit", class: "btn btn-primary" %>
-<% end %>
+<script>
+  (function () {
+    var btn = document.getElementById("togglePassword");
+    var input = document.getElementById("password");
+    var icon = document.getElementById("togglePasswordIcon");
+    if (!btn) return;
+    btn.addEventListener("click", function () {
+      var show = input.type === "password";
+      input.type = show ? "text" : "password";
+      icon.className = show ? "bi bi-eye-slash" : "bi bi-eye";
+    });
+  })();
+</script>

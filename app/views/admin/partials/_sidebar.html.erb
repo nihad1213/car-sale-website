@@ -1,1 +1,84 @@
-this is sidebar
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<style>
+  .admin-sidebar {
+    width: 260px;
+    min-height: 100vh;
+    background: linear-gradient(180deg, #0d1b2a 0%, #1b3a5c 100%);
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .admin-sidebar .brand { font-weight: 800; letter-spacing: -.5px; font-size: 1.4rem; }
+  .admin-sidebar .nav-section {
+    font-size: .7rem; text-transform: uppercase; letter-spacing: .08em;
+    color: rgba(255,255,255,.45); padding: 1rem 1rem .35rem;
+  }
+  .admin-sidebar .nav-link {
+    color: rgba(255,255,255,.75);
+    border-radius: .5rem;
+    padding: .6rem 1rem;
+    display: flex; align-items: center; gap: .75rem;
+    transition: background .15s ease, color .15s ease;
+  }
+  .admin-sidebar .nav-link:hover { background: rgba(255,255,255,.08); color: #fff; }
+  .admin-sidebar .nav-link.active { background: var(--bs-primary); color: #fff; }
+  .admin-sidebar .nav-link .bi { font-size: 1.1rem; }
+  .admin-sidebar .user-box { border-top: 1px solid rgba(255,255,255,.12); }
+
+  @media (max-width: 991.98px) {
+    .admin-sidebar { width: 100%; min-height: auto; }
+  }
+</style>
+
+<%
+  # Adjust these route helpers to match your config/routes.rb.
+  # Using plain paths here so the partial renders even before routes exist.
+  items = [
+    { label: "Dashboard", icon: "bi-speedometer2", path: "/admin" },
+    { label: "Listings",  icon: "bi-car-front",    path: "/admin/cars" },
+    { label: "Users",     icon: "bi-people",       path: "/admin/users" },
+    { label: "Dealers",   icon: "bi-shop",         path: "/admin/dealers" },
+    { label: "Messages",  icon: "bi-chat-dots",    path: "/admin/messages" }
+  ]
+  settings = [
+    { label: "Settings",  icon: "bi-gear",         path: "/admin/settings" }
+  ]
+%>
+
+<aside class="admin-sidebar d-flex flex-column p-3">
+  <a href="/admin" class="brand text-white text-decoration-none d-flex align-items-center gap-2 px-2 mb-3">
+    <i class="bi bi-car-front-fill"></i>
+    <span>RoR<span class="text-warning">Car</span></span>
+  </a>
+
+  <nav class="nav flex-column flex-grow-1">
+    <div class="nav-section">Main</div>
+    <% items.each do |item| %>
+      <% active = item[:path] == "/admin" ? request.path == "/admin" : request.path.start_with?(item[:path]) %>
+      <a href="<%= item[:path] %>" class="nav-link <%= 'active' if active %>">
+        <i class="bi <%= item[:icon] %>"></i><%= item[:label] %>
+      </a>
+    <% end %>
+
+    <div class="nav-section">System</div>
+    <% settings.each do |item| %>
+      <a href="<%= item[:path] %>" class="nav-link <%= 'active' if request.path.start_with?(item[:path]) %>">
+        <i class="bi <%= item[:icon] %>"></i><%= item[:label] %>
+      </a>
+    <% end %>
+  </nav>
+
+  <div class="user-box pt-3 mt-3 d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center gap-2">
+      <i class="bi bi-person-circle fs-3"></i>
+      <div class="small lh-sm">
+        <div class="fw-semibold">Administrator</div>
+        <div class="text-white-50">Signed in</div>
+      </div>
+    </div>
+    <%# Change the path/method to match your logout route %>
+    <%= button_to "/admin/logout", method: :delete, class: "btn btn-sm btn-outline-light", title: "Sign out", form: { class: "m-0" } do %>
+      <i class="bi bi-box-arrow-right"></i>
+    <% end %>
+  </div>
+</aside>
