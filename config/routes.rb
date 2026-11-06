@@ -11,4 +11,16 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "homepage#index"
+
+  get "login", to: "sessions#new", as: "login"
+  post "login", to: "sessions#create"
+  delete "logout", to: "sessions#destroy", as: "logout"
+
+  get "admin", to: "admin#index", as: "admin"
+
+  namespace :admin do
+    get "login", to: "sessions#new", as: "login"
+    post "login", to: "sessions#create"
+    delete "logout", to: "sessions#destroy", as: "logout"
+  end
 end

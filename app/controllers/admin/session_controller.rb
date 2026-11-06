@@ -1,4 +1,8 @@
-class Admin::SessionController < ApplicationController
+class Admin::SessionsController < ApplicationController
+  def new
+    render "admin/new"
+  end
+
   def create
     user = User.find_by(email: params[:email])
 
@@ -7,7 +11,7 @@ class Admin::SessionController < ApplicationController
       redirect_to admin_path, notice: "Logged in successfully as Admin!"
     else
       flash.now[:alert] = "Invalid email, password, or lack of admin privileges."
-      render :new, status: :unprocessable_entity
+      render "admin/new", status: :unprocessable_entity
     end
   end
 
