@@ -1,0 +1,25 @@
+<%= form_with url: admin_login_path, local: true do |f| %>
+  <% if flash[:alert] %>
+    <div class="alert alert-danger" role="alert">
+      <%= flash[:alert] %>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :email, "Email address", for: "exampleInputEmail1" %>
+    <%= f.email_field :email, class: "form-control", id: "exampleInputEmail1", required: true, aria: { describedby: "emailHelp" } %>
+    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :password, "Password", for: "exampleInputPassword1" %>
+    <%= f.password_field :password, class: "form-control", id: "exampleInputPassword1", required: true %>
+  </div>
+
+  <div class="form-group form-check">
+    <%= f.check_box :remember_me, class: "form-check-input", id: "exampleCheck1" %>
+    <%= f.label :remember_me, "Check me out", class: "form-check-label", for: "exampleCheck1" %>
+  </div>
+
+  <%= f.submit "Submit", class: "btn btn-primary" %>
+<% end %>
