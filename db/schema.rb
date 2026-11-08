@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_06_152937) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_08_211712) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -33,6 +33,29 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_06_152937) do
     t.string "name"
     t.bigint "created_by"
     t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "site_configurations", force: :cascade do |t|
+    t.string "site_name"
+    t.string "tagline"
+    t.string "phone_number"
+    t.string "email"
+    t.text "address"
+    t.string "meta_title"
+    t.text "meta_description"
+    t.string "meta_keywords"
+    t.string "canonical_url"
+    t.string "robots", default: "index, follow"
+    t.string "og_title"
+    t.text "og_description"
+    t.string "og_image_url"
+    t.string "og_type", default: "website"
+    t.string "twitter_card", default: "summary_large_image"
+    t.string "twitter_site"
+    t.string "google_analytics_id"
+    t.string "google_site_verification"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
