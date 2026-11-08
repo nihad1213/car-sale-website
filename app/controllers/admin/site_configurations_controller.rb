@@ -27,6 +27,7 @@ class Admin::SiteConfigurationsController < ApplicationController
   def site_configuration_params
     params.require(:site_configuration).permit(
       :site_name, :tagline,
+      :listings_count, :dealers_count, :satisfaction_rate,
       :phone_number, :email, :address,
       :meta_title, :meta_description, :meta_keywords, :canonical_url, :robots,
       :og_title, :og_description, :og_image_url, :og_type,

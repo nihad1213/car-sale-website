@@ -38,7 +38,6 @@
     <div class="container py-lg-4">
       <div class="row align-items-center">
         <div class="col-lg-7">
-          <!-- Dynamically renders Site Name & Tagline -->
           <h1 class="display-5 fw-bold mb-3">
             Welcome to <span class="text-warning"><%= site_config.site_name %></span>
           </h1>
@@ -52,9 +51,18 @@
         </div>
         <div class="col-lg-5 d-none d-lg-block">
           <div class="row text-center g-3">
-            <div class="col-4"><div class="display-6 fw-bold">12k+</div><small class="text-white-50">Listings</small></div>
-            <div class="col-4"><div class="display-6 fw-bold">3k+</div><small class="text-white-50">Dealers</small></div>
-            <div class="col-4"><div class="display-6 fw-bold">98%</div><small class="text-white-50">Happy buyers</small></div>
+            <div class="col-4">
+              <div class="display-6 fw-bold"><%= site_config.listings_count.presence || "12k+" %></div>
+              <small class="text-white-50">Listings</small>
+            </div>
+            <div class="col-4">
+              <div class="display-6 fw-bold"><%= site_config.dealers_count.presence || "45+" %></div>
+              <small class="text-white-50">Dealers</small>
+            </div>
+            <div class="col-4">
+              <div class="display-6 fw-bold"><%= site_config.satisfaction_rate.presence || "98%" %></div>
+              <small class="text-white-50">Happy buyers</small>
+            </div>
           </div>
         </div>
       </div>

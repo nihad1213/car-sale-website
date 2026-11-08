@@ -50,5 +50,4 @@ regular_user = User.find_or_create_by!(email: "user@carwebsite.com") do |user|
 end
 puts "Regular user ready: #{regular_user.email} (Password: password123)"
 
-
 puts "Seeding finished successfully!"
