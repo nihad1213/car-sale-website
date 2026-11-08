@@ -6,6 +6,10 @@ class User < ApplicationRecord
   belongs_to :creator, class_name: "User", foreign_key: "created_by", optional: true
   belongs_to :updater, class_name: "User", foreign_key: "updated_by", optional: true
 
+  has_many :vehicles, foreign_key: "created_by", dependent: :nullify
+  has_many :body_types, foreign_key: "created_by", dependent: :nullify
+  has_many :places, foreign_key: "created_by", dependent: :nullify
+
   def admin?
     role&.name == "Admin"
   end

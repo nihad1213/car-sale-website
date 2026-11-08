@@ -1,0 +1,33 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  make: MyString
+  car_model: MyString
+  year: 1
+  price: 9.99
+  mileage: 1
+  fuel: MyString
+  transmission: MyString
+  body_type: one
+  place: one
+  badge: MyString
+  description: MyText
+  created_by: 1
+  updated_by: 1
+
+two:
+  title: MyString
+  make: MyString
+  car_model: MyString
+  year: 1
+  price: 9.99
+  mileage: 1
+  fuel: MyString
+  transmission: MyString
+  body_type: two
+  place: two
+  badge: MyString
+  description: MyText
+  created_by: 1
+  updated_by: 1
