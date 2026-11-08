@@ -4,7 +4,7 @@
   <main class="flex-grow-1 overflow-x-auto p-3 p-lg-4">
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
       <div>
-        <h1 class="h3 fw-bold mb-0">Site Configuration &amp; SEO</h1>
+        <h1 class="h3 fw-bold mb-0">Site Configuration & SEO</h1>
         <small class="text-muted">Manage global platform identity, contact details, and search engine metadata.</small>
       </div>
       <a href="/admin" class="btn btn-outline-secondary btn-sm">
@@ -18,22 +18,11 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
     <% end %>
-    <% if alert.present? %>
-      <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
-        <i class="bi bi-exclamation-triangle-fill me-2"></i><%= alert %>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-    <% end %>
 
-    <%= form_with model: @site_configuration,
-                  url: admin_site_configuration_path,
-                  method: :patch do |f| %>
-
+    <%= form_with model: [:admin, @site_configuration], local: true, class: "needs-validation" do |f| %>
       <% if @site_configuration.errors.any? %>
         <div class="alert alert-danger shadow-sm">
-          <h5 class="alert-heading fs-6 fw-bold">
-            <i class="bi bi-exclamation-triangle-fill me-2"></i>Please correct the following errors:
-          </h5>
+          <h5 class="alert-heading fs-6 fw-bold"><i class="bi bi-exclamation-triangle-fill me-2"></i>Please correct the following errors:</h5>
           <ul class="mb-0">
             <% @site_configuration.errors.full_messages.each do |msg| %>
               <li><%= msg %></li>
@@ -63,7 +52,7 @@
             </div>
             <div class="col-md-6">
               <%= f.label :phone_number, class: "form-label fw-semibold" %>
-              <%= f.telephone_field :phone_number, class: "form-control" %>
+              <%= f.text_field :phone_number, class: "form-control" %>
             </div>
             <div class="col-12">
               <%= f.label :address, class: "form-label fw-semibold" %>
@@ -73,44 +62,64 @@
         </div>
       </div>
 
-      <!-- SEO Settings -->
+      <!-- Hero & Homepage Stats -->
       <div class="card border-0 shadow-sm mb-4">
         <div class="card-header bg-white border-0 pt-3">
-          <h2 class="h6 fw-bold mb-0 text-success"><i class="bi bi-search me-2"></i>SEO &amp; Search Engines</h2>
+          <h2 class="h6 fw-bold mb-0 text-secondary"><i class="bi bi-bar-chart-line me-2"></i>Homepage Hero Counters</h2>
         </div>
         <div class="card-body">
           <div class="row g-3">
-            <div class="col-12">
-              <%= f.label :meta_title, class: "form-label fw-semibold" %>
-              <%= f.text_field :meta_title, class: "form-control", maxlength: 70 %>
-              <div class="form-text">Recommended: up to 60 characters.</div>
+            <div class="col-md-4">
+              <%= f.label :listings_count, "Listings Counter", class: "form-label fw-semibold" %>
+              <%= f.text_field :listings_count, class: "form-control", placeholder: "12k+" %>
             </div>
-            <div class="col-12">
-              <%= f.label :meta_description, class: "form-label fw-semibold" %>
-              <%= f.text_area :meta_description, rows: 3, class: "form-control", maxlength: 320 %>
-              <div class="form-text">Recommended: 150–160 characters.</div>
+            <div class="col-md-4">
+              <%= f.label :dealers_count, "Dealers Counter", class: "form-label fw-semibold" %>
+              <%= f.text_field :dealers_count, class: "form-control", placeholder: "3k+" %>
             </div>
-            <div class="col-md-6">
-              <%= f.label :meta_keywords, class: "form-label fw-semibold" %>
-              <%= f.text_field :meta_keywords, class: "form-control", placeholder: "cars, buy cars, marketplace" %>
-              <div class="form-text">Comma-separated.</div>
-            </div>
-            <div class="col-md-6">
-              <%= f.label :robots, class: "form-label fw-semibold" %>
-              <%= f.text_field :robots, class: "form-control", placeholder: "index, follow" %>
-            </div>
-            <div class="col-12">
-              <%= f.label :canonical_url, class: "form-label fw-semibold" %>
-              <%= f.url_field :canonical_url, class: "form-control", placeholder: "https://example.com" %>
+            <div class="col-md-4">
+              <%= f.label :satisfaction_rate, "Satisfaction Rate Counter", class: "form-label fw-semibold" %>
+              <%= f.text_field :satisfaction_rate, class: "form-control", placeholder: "98%" %>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Open Graph & Analytics -->
+      <!-- SEO Settings -->
       <div class="card border-0 shadow-sm mb-4">
         <div class="card-header bg-white border-0 pt-3">
-          <h2 class="h6 fw-bold mb-0 text-warning"><i class="bi bi-share me-2"></i>Social Media (Open Graph) &amp; Analytics</h2>
+          <h2 class="h6 fw-bold mb-0 text-success"><i class="bi bi-search me-2"></i>SEO & Search Engines</h2>
+        </div>
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-md-12">
+              <%= f.label :meta_title, class: "form-label fw-semibold" %>
+              <%= f.text_field :meta_title, class: "form-control" %>
+            </div>
+            <div class="col-md-12">
+              <%= f.label :meta_description, class: "form-label fw-semibold" %>
+              <%= f.text_area :meta_description, rows: 3, class: "form-control" %>
+            </div>
+            <div class="col-md-6">
+              <%= f.label :meta_keywords, class: "form-label fw-semibold" %>
+              <%= f.text_field :meta_keywords, class: "form-control", placeholder: "cars, buy cars, marketplace" %>
+            </div>
+            <div class="col-md-6">
+              <%= f.label :robots, class: "form-label fw-semibold" %>
+              <%= f.text_field :robots, class: "form-control" %>
+            </div>
+            <div class="col-md-12">
+              <%= f.label :canonical_url, class: "form-label fw-semibold" %>
+              <%= f.text_field :canonical_url, class: "form-control" %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Open Graph & Social Sharing -->
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white border-0 pt-3">
+          <h2 class="h6 fw-bold mb-0 text-warning"><i class="bi bi-share me-2"></i>Social Media (Open Graph) & Analytics</h2>
         </div>
         <div class="card-body">
           <div class="row g-3">
@@ -120,7 +129,7 @@
             </div>
             <div class="col-md-6">
               <%= f.label :og_image_url, class: "form-label fw-semibold" %>
-              <%= f.url_field :og_image_url, class: "form-control", placeholder: "https://example.com/og.jpg" %>
+              <%= f.text_field :og_image_url, class: "form-control" %>
             </div>
             <div class="col-md-6">
               <%= f.label :google_analytics_id, class: "form-label fw-semibold" %>
@@ -134,6 +143,7 @@
         </div>
       </div>
 
+      <!-- Submit Action -->
       <div class="d-flex justify-content-end mb-5">
         <%= f.submit "Save Configuration", class: "btn btn-primary px-4 py-2 fw-semibold shadow-sm" %>
       </div>
