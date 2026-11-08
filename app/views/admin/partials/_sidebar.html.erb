@@ -31,8 +31,6 @@
 </style>
 
 <%
-  # Adjust these route helpers to match your config/routes.rb.
-  # Using plain paths here so the partial renders even before routes exist.
   items = [
     { label: "Dashboard", icon: "bi-speedometer2", path: "/admin" },
     { label: "Listings",  icon: "bi-car-front",    path: "/admin/cars" },
@@ -40,8 +38,11 @@
     { label: "Dealers",   icon: "bi-shop",         path: "/admin/dealers" },
     { label: "Messages",  icon: "bi-chat-dots",    path: "/admin/messages" }
   ]
+  
+  # Added Site Configuration to the system settings
   settings = [
-    { label: "Settings",  icon: "bi-gear",         path: "/admin/settings" }
+    { label: "Site Configuration", icon: "bi-sliders", path: "/admin/site_configuration/edit" },
+    { label: "Settings",           icon: "bi-gear",     path: "/admin/settings" }
   ]
 %>
 
@@ -72,12 +73,11 @@
     <div class="d-flex align-items-center gap-2">
       <i class="bi bi-person-circle fs-3"></i>
       <div class="small lh-sm">
-        <div class="fw-semibold">Administrator</div>
+        <div class="fw-semibold"><%= current_user&.first_name + ' ' + current_user&.last_name || "Administrator" %></div>
         <div class="text-white-50">Signed in</div>
       </div>
     </div>
-    <%# Change the path/method to match your logout route %>
-    <%= button_to "/admin/logout", method: :delete, class: "btn btn-sm btn-outline-light", title: "Sign out", form: { class: "m-0" } do %>
+    <%= button_to admin_logout_path, method: :delete, class: "btn btn-sm btn-outline-light", title: "Sign out", form: { class: "m-0" } do %>
       <i class="bi bi-box-arrow-right"></i>
     <% end %>
   </div>

@@ -1,15 +1,15 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
+# This file should ensure the existence of records required to run the application in every environment.
+# The code is idempotent so it can be executed safely at any point.
 
 puts "Starting database seeding..."
 
-# 1. Define and Create Permissions
+# 1. Define ALL System Permissions in a Single Array
 permission_names = [
   "view_dashboard",
   "create_user",
-  "updated_user",
-  "delete_user"
+  "update_user",
+  "delete_user",
+  "manage_site_configuration"
 ]
 
 permissions = permission_names.map do |perm_name|
@@ -22,7 +22,7 @@ admin_role = Role.find_or_create_by!(name: "Admin")
 regular_role = Role.find_or_create_by!(name: "User")
 puts "Created/Verified roles: Admin, User"
 
-# 3. Assign ALL permissions to the Admin role
+# 3. Assign ALL permissions to the Admin role dynamically
 permissions.each do |permission|
   unless admin_role.permissions.include?(permission)
     admin_role.permissions << permission
@@ -49,5 +49,6 @@ regular_user = User.find_or_create_by!(email: "user@carwebsite.com") do |user|
   user.role = regular_role
 end
 puts "Regular user ready: #{regular_user.email} (Password: password123)"
+
 
 puts "Seeding finished successfully!"

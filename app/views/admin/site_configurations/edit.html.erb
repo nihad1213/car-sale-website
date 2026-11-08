@@ -1,0 +1,142 @@
+<div class="d-flex flex-column flex-lg-row min-vh-100 bg-light">
+  <%= render "admin/partials/sidebar" %>
+
+  <main class="flex-grow-1 overflow-x-auto p-3 p-lg-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+      <div>
+        <h1 class="h3 fw-bold mb-0">Site Configuration &amp; SEO</h1>
+        <small class="text-muted">Manage global platform identity, contact details, and search engine metadata.</small>
+      </div>
+      <a href="/admin" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left me-1"></i>Back to Dashboard
+      </a>
+    </div>
+
+    <% if notice.present? %>
+      <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i><%= notice %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% end %>
+    <% if alert.present? %>
+      <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i><%= alert %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% end %>
+
+    <%= form_with model: @site_configuration,
+                  url: admin_site_configuration_path,
+                  method: :patch do |f| %>
+
+      <% if @site_configuration.errors.any? %>
+        <div class="alert alert-danger shadow-sm">
+          <h5 class="alert-heading fs-6 fw-bold">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>Please correct the following errors:
+          </h5>
+          <ul class="mb-0">
+            <% @site_configuration.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <!-- General Information -->
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white border-0 pt-3">
+          <h2 class="h6 fw-bold mb-0 text-primary"><i class="bi bi-info-circle me-2"></i>General Information</h2>
+        </div>
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <%= f.label :site_name, class: "form-label fw-semibold" %>
+              <%= f.text_field :site_name, class: "form-control" %>
+            </div>
+            <div class="col-md-6">
+              <%= f.label :tagline, class: "form-label fw-semibold" %>
+              <%= f.text_field :tagline, class: "form-control" %>
+            </div>
+            <div class="col-md-6">
+              <%= f.label :email, class: "form-label fw-semibold" %>
+              <%= f.email_field :email, class: "form-control" %>
+            </div>
+            <div class="col-md-6">
+              <%= f.label :phone_number, class: "form-label fw-semibold" %>
+              <%= f.telephone_field :phone_number, class: "form-control" %>
+            </div>
+            <div class="col-12">
+              <%= f.label :address, class: "form-label fw-semibold" %>
+              <%= f.text_area :address, rows: 2, class: "form-control" %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEO Settings -->
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white border-0 pt-3">
+          <h2 class="h6 fw-bold mb-0 text-success"><i class="bi bi-search me-2"></i>SEO &amp; Search Engines</h2>
+        </div>
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-12">
+              <%= f.label :meta_title, class: "form-label fw-semibold" %>
+              <%= f.text_field :meta_title, class: "form-control", maxlength: 70 %>
+              <div class="form-text">Recommended: up to 60 characters.</div>
+            </div>
+            <div class="col-12">
+              <%= f.label :meta_description, class: "form-label fw-semibold" %>
+              <%= f.text_area :meta_description, rows: 3, class: "form-control", maxlength: 320 %>
+              <div class="form-text">Recommended: 150–160 characters.</div>
+            </div>
+            <div class="col-md-6">
+              <%= f.label :meta_keywords, class: "form-label fw-semibold" %>
+              <%= f.text_field :meta_keywords, class: "form-control", placeholder: "cars, buy cars, marketplace" %>
+              <div class="form-text">Comma-separated.</div>
+            </div>
+            <div class="col-md-6">
+              <%= f.label :robots, class: "form-label fw-semibold" %>
+              <%= f.text_field :robots, class: "form-control", placeholder: "index, follow" %>
+            </div>
+            <div class="col-12">
+              <%= f.label :canonical_url, class: "form-label fw-semibold" %>
+              <%= f.url_field :canonical_url, class: "form-control", placeholder: "https://example.com" %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Open Graph & Analytics -->
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white border-0 pt-3">
+          <h2 class="h6 fw-bold mb-0 text-warning"><i class="bi bi-share me-2"></i>Social Media (Open Graph) &amp; Analytics</h2>
+        </div>
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <%= f.label :og_title, class: "form-label fw-semibold" %>
+              <%= f.text_field :og_title, class: "form-control" %>
+            </div>
+            <div class="col-md-6">
+              <%= f.label :og_image_url, class: "form-label fw-semibold" %>
+              <%= f.url_field :og_image_url, class: "form-control", placeholder: "https://example.com/og.jpg" %>
+            </div>
+            <div class="col-md-6">
+              <%= f.label :google_analytics_id, class: "form-label fw-semibold" %>
+              <%= f.text_field :google_analytics_id, class: "form-control", placeholder: "G-XXXXXXXXXX" %>
+            </div>
+            <div class="col-md-6">
+              <%= f.label :google_site_verification, class: "form-label fw-semibold" %>
+              <%= f.text_field :google_site_verification, class: "form-control" %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end mb-5">
+        <%= f.submit "Save Configuration", class: "btn btn-primary px-4 py-2 fw-semibold shadow-sm" %>
+      </div>
+    <% end %>
+  </main>
+</div>
