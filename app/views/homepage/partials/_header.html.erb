@@ -46,7 +46,13 @@
             <a class="nav-link" href="#"><i class="bi bi-heart me-1"></i>Saved</a>
           </li>
           <li class="nav-item">
-            <a class="btn btn-outline-primary" href="#"><i class="bi bi-plus-lg me-1"></i>Sell your car</a>
+            <% if current_user.present? %>
+              <a class="btn btn-outline-primary" href="#"><i class="bi bi-plus-lg me-1"></i>Sell your car</a>
+            <% else %>
+              <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#loginToSellModal">
+                <i class="bi bi-plus-lg me-1"></i>Sell your car
+              </button>
+            <% end %>
           </li>
           
           <!-- Profile Dropdown -->
@@ -163,3 +169,6 @@
     </div>
   </div>
 </header>
+
+
+<%= render "homepage/partials/signinmodal" %>

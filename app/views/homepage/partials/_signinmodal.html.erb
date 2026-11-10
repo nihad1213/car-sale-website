@@ -1,0 +1,21 @@
+<% unless current_user.present? %>
+  <div class="modal fade" id="loginToSellModal" tabindex="-1" aria-labelledby="loginToSellLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header border-0 pb-0">
+          <h2 class="modal-title h5 fw-bold" id="loginToSellLabel">
+            <i class="bi bi-lock text-primary me-2"></i>Login required
+          </h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Please sign in to your account to sell your car. It only takes a minute.
+        </div>
+        <div class="modal-footer border-0 pt-0">
+          <a href="#" class="btn btn-outline-secondary">Register</a>
+          <a href="<%= login_path %>" class="btn btn-primary">Sign in</a>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
