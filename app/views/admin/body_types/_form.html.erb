@@ -1,0 +1,31 @@
+<%= form_with model: [:admin, body_type], local: true do |f| %>
+  <% if body_type.errors.any? %>
+    <div class="alert alert-danger shadow-sm">
+      <h5 class="alert-heading fs-6 fw-bold"><i class="bi bi-exclamation-triangle-fill me-2"></i>Please correct the following errors:</h5>
+      <ul class="mb-0">
+        <% body_type.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-white border-0 pt-3">
+      <h2 class="h6 fw-bold mb-0 text-primary"><i class="bi bi-info-circle me-2"></i>General Information</h2>
+    </div>
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <%= f.label :name, class: "form-label fw-semibold" %>
+          <%= f.text_field :name, class: "form-control", required: true %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-end gap-2 mb-5">
+    <a href="<%= admin_body_types_path %>" class="btn btn-outline-secondary px-4 py-2">Cancel</a>
+    <%= f.submit class: "btn btn-primary px-4 py-2 fw-semibold shadow-sm" %>
+  </div>
+<% end %>

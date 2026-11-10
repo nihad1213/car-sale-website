@@ -28,5 +28,6 @@ Rails.application.routes.draw do
 
     resource :site_configuration, only: [ :show, :edit, :update ]
     resources :roles
+    resources :body_types
   end
 end
