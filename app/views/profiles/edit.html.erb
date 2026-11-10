@@ -1,0 +1,53 @@
+<%= render "homepage/partials/header" %>
+
+<main class="container py-5" style="max-width: 720px;">
+  <div class="card border-0 shadow-sm">
+    <div class="card-body p-4">
+      <h1 class="h4 fw-bold mb-4">Edit profile</h1>
+
+      <% if @user.errors.any? %>
+        <div class="alert alert-danger shadow-sm">
+          <ul class="mb-0">
+            <% @user.errors.full_messages.each do |msg| %><li><%= msg %></li><% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <%= form_with model: @user, url: profile_path, method: :patch, class: "row g-3" do |f| %>
+        <div class="col-md-6">
+          <%= f.label :first_name, class: "form-label fw-semibold" %>
+          <%= f.text_field :first_name, class: "form-control", required: true %>
+        </div>
+        <div class="col-md-6">
+          <%= f.label :last_name, class: "form-label fw-semibold" %>
+          <%= f.text_field :last_name, class: "form-control", required: true %>
+        </div>
+        <div class="col-12">
+          <%= f.label :email, class: "form-label fw-semibold" %>
+          <%= f.email_field :email, class: "form-control", required: true %>
+        </div>
+
+        <div class="col-12"><hr class="my-1"><small class="text-muted">Leave the new password blank to keep your current one.</small></div>
+        <div class="col-md-6">
+          <%= f.label :password, "New password", class: "form-label fw-semibold" %>
+          <%= f.password_field :password, class: "form-control", autocomplete: "new-password" %>
+        </div>
+        <div class="col-md-6">
+          <%= f.label :password_confirmation, "Confirm new password", class: "form-label fw-semibold" %>
+          <%= f.password_field :password_confirmation, class: "form-control", autocomplete: "new-password" %>
+        </div>
+
+        <div class="col-12"><hr class="my-1"></div>
+        <div class="col-12">
+          <%= label_tag :current_password, "Current password (required to save)", class: "form-label fw-semibold" %>
+          <%= password_field_tag :current_password, nil, class: "form-control", required: true, autocomplete: "current-password" %>
+        </div>
+
+        <div class="col-12 d-flex justify-content-end gap-2">
+          <a href="<%= profile_path %>" class="btn btn-outline-secondary">Cancel</a>
+          <%= f.submit "Save changes", class: "btn btn-primary px-4" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</main>

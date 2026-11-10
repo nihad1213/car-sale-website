@@ -16,4 +16,12 @@ class ApplicationController < ActionController::Base
   def site_config
     @site_config ||= SiteConfiguration.first_or_create!
   end
+
+  def require_login
+    return if current_user.present?
+
+    flash[:open_auth_modal] = true
+    flash[:auth_error] = "Please sign in to continue."
+    redirect_to root_path
+  end
 end

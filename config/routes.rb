@@ -18,6 +18,9 @@ Rails.application.routes.draw do
 
   get "admin", to: "admin#index", as: "admin"
 
+  resource :registration, only: :create
+  resource :profile, only: %i[show edit update]
+
   namespace :admin do
     get "login", to: "sessions#new", as: "login"
     post "login", to: "sessions#create"

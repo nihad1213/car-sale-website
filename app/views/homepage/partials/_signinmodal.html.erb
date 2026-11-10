@@ -1,21 +1,85 @@
 <% unless current_user.present? %>
-  <div class="modal fade" id="loginToSellModal" tabindex="-1" aria-labelledby="loginToSellLabel" aria-hidden="true">
+  <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true"
+       data-open="<%= flash[:open_auth_modal].present? %>">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content border-0 shadow">
         <div class="modal-header border-0 pb-0">
-          <h2 class="modal-title h5 fw-bold" id="loginToSellLabel">
-            <i class="bi bi-lock text-primary me-2"></i>Login required
-          </h2>
+          <h2 class="modal-title h5 fw-bold" id="authModalLabel">Welcome</h2>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+
         <div class="modal-body">
-          Please sign in to your account to sell your car. It only takes a minute.
-        </div>
-        <div class="modal-footer border-0 pt-0">
-          <a href="#" class="btn btn-outline-secondary">Register</a>
-          <a href="<%= login_path %>" class="btn btn-primary">Sign in</a>
+          <% if flash[:auth_error].present? %>
+            <div class="alert alert-danger small"><%= flash[:auth_error] %></div>
+          <% end %>
+
+          <ul class="nav nav-pills nav-fill mb-3" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link <%= 'active' unless flash[:auth_tab] == 'register' %>" data-bs-toggle="pill"
+                      data-bs-target="#tab-login" type="button" role="tab">Sign in</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link <%= 'active' if flash[:auth_tab] == 'register' %>" data-bs-toggle="pill"
+                      data-bs-target="#tab-register" type="button" role="tab">Register</button>
+            </li>
+          </ul>
+
+          <div class="tab-content">
+            <!-- Login: adjust action and field names to match your sessions controller -->
+            <div class="tab-pane fade <%= 'show active' unless flash[:auth_tab] == 'register' %>" id="tab-login" role="tabpanel">
+              <%= form_with url: login_path, method: :post, class: "row g-3" do |f| %>
+                <div class="col-12">
+                  <%= f.label :email, class: "form-label small fw-semibold" %>
+                  <%= f.email_field :email, class: "form-control", required: true %>
+                </div>
+                <div class="col-12">
+                  <%= f.label :password, class: "form-label small fw-semibold" %>
+                  <%= f.password_field :password, class: "form-control", required: true %>
+                </div>
+                <div class="col-12">
+                  <%= f.submit "Sign in", class: "btn btn-primary w-100" %>
+                </div>
+              <% end %>
+            </div>
+
+            <!-- Register -->
+            <div class="tab-pane fade <%= 'show active' if flash[:auth_tab] == 'register' %>" id="tab-register" role="tabpanel">
+              <%= form_with model: User.new, url: registration_path, method: :post, class: "row g-3" do |f| %>
+                <div class="col-6">
+                  <%= f.label :first_name, class: "form-label small fw-semibold" %>
+                  <%= f.text_field :first_name, class: "form-control", required: true %>
+                </div>
+                <div class="col-6">
+                  <%= f.label :last_name, class: "form-label small fw-semibold" %>
+                  <%= f.text_field :last_name, class: "form-control", required: true %>
+                </div>
+                <div class="col-12">
+                  <%= f.label :email, class: "form-label small fw-semibold" %>
+                  <%= f.email_field :email, class: "form-control", required: true %>
+                </div>
+                <div class="col-6">
+                  <%= f.label :password, class: "form-label small fw-semibold" %>
+                  <%= f.password_field :password, class: "form-control", required: true, minlength: 8 %>
+                </div>
+                <div class="col-6">
+                  <%= f.label :password_confirmation, "Confirm", class: "form-label small fw-semibold" %>
+                  <%= f.password_field :password_confirmation, class: "form-control", required: true %>
+                </div>
+                <div class="col-12">
+                  <%= f.submit "Create account", class: "btn btn-primary w-100" %>
+                </div>
+              <% end %>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
+
+  <script>
+    document.addEventListener("turbo:load", function () {
+      var el = document.getElementById("authModal");
+      if (el && el.dataset.open === "true") bootstrap.Modal.getOrCreateInstance(el).show();
+    });
+  </script>
 <% end %>
