@@ -1,0 +1,35 @@
+<style>
+  #admin-bar {
+    position: fixed; top: 0; left: 0; right: 0; height: 32px; z-index: 2000;
+    background: #1d2327; color: #f0f0f1; font-size: .8rem;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 .75rem;
+  }
+  #admin-bar a, #admin-bar button {
+    color: #f0f0f1; text-decoration: none; background: none; border: 0;
+    padding: 0 .6rem; height: 32px; display: inline-flex; align-items: center; gap: .35rem;
+    font-size: inherit;
+  }
+  #admin-bar a:hover, #admin-bar button:hover { background: #2c3338; color: #72aee6; }
+  #admin-bar .ab-group { display: flex; align-items: center; }
+  body.has-admin-bar { padding-top: 32px; }
+</style>
+
+<div id="admin-bar" role="navigation" aria-label="Admin bar">
+  <div class="ab-group">
+    <a href="/admin"><i class="bi bi-speedometer2"></i>Dashboard</a>
+    <a href="/"><i class="bi bi-car-front"></i>Main Page</a>
+    <a href="/admin/site_configuration/edit"><i class="bi bi-sliders"></i>Site Config</a>
+
+    <%= yield :admin_bar_actions if content_for?(:admin_bar_actions) %>
+  </div>
+
+  <div class="ab-group">
+    <span class="px-2 text-white-50">
+      Howdy, <%= current_user.first_name.presence || "Admin" %>
+    </span>
+    <%= button_to admin_logout_path, method: :delete, form: { class: "m-0" } do %>
+      <i class="bi bi-box-arrow-right"></i>Log out
+    <% end %>
+  </div>
+</div>
