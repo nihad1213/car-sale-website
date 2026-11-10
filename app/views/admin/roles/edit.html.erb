@@ -1,0 +1,17 @@
+<div class="d-flex flex-column flex-lg-row min-vh-100 bg-light">
+  <%= render "admin/partials/sidebar" %>
+
+  <main class="flex-grow-1 overflow-x-auto p-3 p-lg-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+      <div>
+        <h1 class="h3 fw-bold mb-0">Edit Role</h1>
+        <small class="text-muted">Update the name and permissions for <%= @role.name_was %>.</small>
+      </div>
+      <a href="<%= admin_roles_path %>" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left me-1"></i>Back to Roles
+      </a>
+    </div>
+
+    <%= render "form", role: @role, permissions: @permissions %>
+  </main>
+</div>

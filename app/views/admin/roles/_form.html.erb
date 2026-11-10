@@ -1,0 +1,55 @@
+<%= form_with model: [:admin, role], local: true, class: "needs-validation" do |f| %>
+  <% if role.errors.any? %>
+    <div class="alert alert-danger shadow-sm">
+      <h5 class="alert-heading fs-6 fw-bold"><i class="bi bi-exclamation-triangle-fill me-2"></i>Please correct the following errors:</h5>
+      <ul class="mb-0">
+        <% role.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <!-- General Information -->
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-white border-0 pt-3">
+      <h2 class="h6 fw-bold mb-0 text-primary"><i class="bi bi-info-circle me-2"></i>General Information</h2>
+    </div>
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <%= f.label :name, class: "form-label fw-semibold" %>
+          <%= f.text_field :name, class: "form-control", required: true %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Permissions -->
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-white border-0 pt-3">
+      <h2 class="h6 fw-bold mb-0 text-success"><i class="bi bi-shield-check me-2"></i>Permissions</h2>
+    </div>
+    <div class="card-body">
+      <div class="row g-2">
+        <%= f.collection_check_boxes :permission_ids, permissions, :id, :name do |b| %>
+          <div class="col-sm-6 col-lg-4 col-xl-3">
+            <div class="form-check">
+              <%= b.check_box class: "form-check-input" %>
+              <%= b.label class: "form-check-label" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <% if permissions.empty? %>
+        <p class="text-muted mb-0">No permissions exist yet.</p>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Submit Action -->
+  <div class="d-flex justify-content-end gap-2 mb-5">
+    <a href="<%= admin_roles_path %>" class="btn btn-outline-secondary px-4 py-2">Cancel</a>
+    <%= f.submit class: "btn btn-primary px-4 py-2 fw-semibold shadow-sm" %>
+  </div>
+<% end %>

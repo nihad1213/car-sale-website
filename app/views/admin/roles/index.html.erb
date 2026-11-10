@@ -1,0 +1,81 @@
+<div class="d-flex flex-column flex-lg-row min-vh-100 bg-light">
+  <%= render "admin/partials/sidebar" %>
+
+  <main class="flex-grow-1 overflow-x-auto p-3 p-lg-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+      <div>
+        <h1 class="h3 fw-bold mb-0">Roles</h1>
+        <small class="text-muted">Manage roles and the permissions assigned to them.</small>
+      </div>
+      <a href="<%= new_admin_role_path %>" class="btn btn-primary btn-sm">
+        <i class="bi bi-plus-lg me-1"></i>New Role
+      </a>
+    </div>
+
+    <% if notice.present? %>
+      <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i><%= notice %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% end %>
+
+    <% if alert.present? %>
+      <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i><%= alert %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% end %>
+
+    <div class="card border-0 shadow-sm">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Name</th>
+              <th>Permissions</th>
+              <th class="text-center">Users</th>
+              <th class="text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @roles.each do |role| %>
+              <tr>
+                <td class="fw-semibold"><%= role.name %></td>
+                <td>
+                  <% role.permissions.first(4).each do |permission| %>
+                    <span class="badge text-bg-light border text-body"><%= permission.name %></span>
+                  <% end %>
+                  <% if role.permissions.size > 4 %>
+                    <span class="small text-muted">+<%= role.permissions.size - 4 %> more</span>
+                  <% end %>
+                  <% if role.permissions.empty? %>
+                    <span class="small text-muted">None</span>
+                  <% end %>
+                </td>
+                <td class="text-center"><%= role.users.size %></td>
+                <td class="text-end text-nowrap">
+                  <a href="<%= admin_role_path(role) %>" class="btn btn-outline-secondary btn-sm" aria-label="View">
+                    <i class="bi bi-eye"></i>
+                  </a>
+                  <a href="<%= edit_admin_role_path(role) %>" class="btn btn-outline-primary btn-sm" aria-label="Edit">
+                    <i class="bi bi-pencil"></i>
+                  </a>
+                  <%= button_to admin_role_path(role), method: :delete,
+                        class: "btn btn-outline-danger btn-sm",
+                        form: { class: "d-inline", data: { turbo_confirm: "Delete this role?" } } do %>
+                    <i class="bi bi-trash"></i>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+            <% if @roles.empty? %>
+              <tr>
+                <td colspan="4" class="text-center text-muted py-4">No roles yet.</td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
