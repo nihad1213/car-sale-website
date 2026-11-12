@@ -54,6 +54,6 @@ class Admin::BodyTypesController < ApplicationController
   end
 
   def body_type_params
-    params.require(:body_type).permit(:name)
+    params.require(:body_type).permit(:name, :icon)
   end
 end
