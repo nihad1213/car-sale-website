@@ -1,0 +1,49 @@
+<div class="d-flex flex-column flex-lg-row min-vh-100 bg-light">
+  <%= render "admin/partials/sidebar" %>
+
+  <main class="flex-grow-1 overflow-x-auto p-3 p-lg-4">
+    <div class="mb-4">
+      <h1 class="h3 fw-bold mb-1">Send Newsletter</h1>
+      <small class="text-muted">
+        Compose an email for all newsletter subscribers.
+      </small>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+      <div class="card-body p-4">
+        <%= form_with scope: :newsletter,
+                      url: admin_newsletters_path,
+                      method: :post do |f| %>
+
+          <div class="mb-3">
+            <%= f.label :subject, "Email Subject", class: "form-label fw-semibold" %>
+            <%= f.text_field :subject,
+                             class: "form-control",
+                             placeholder: "Enter email subject",
+                             required: true %>
+          </div>
+
+          <div class="mb-4">
+            <%= f.label :message, "Message", class: "form-label fw-semibold" %>
+            <%= f.text_area :message,
+                             class: "form-control",
+                             rows: 10,
+                             placeholder: "Write your newsletter...",
+                             required: true %>
+          </div>
+
+          <div class="d-flex gap-2">
+            <%= f.submit "Send to All Subscribers",
+                         class: "btn btn-primary",
+                         data: { turbo_confirm: "Are you sure you want to send this newsletter to all subscribers?" } %>
+
+            <%= link_to "Cancel",
+                        admin_subscribers_path,
+                        class: "btn btn-outline-secondary" %>
+          </div>
+
+        <% end %>
+      </div>
+    </div>
+  </main>
+</div>
