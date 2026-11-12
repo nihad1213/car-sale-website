@@ -47,10 +47,17 @@
       <!-- Newsletter Subscription -->
       <div class="col-md-4">
         <h6 class="text-white">Stay updated</h6>
-        <form class="input-group input-group-sm" action="#" method="post">
-          <input type="email" class="form-control" placeholder="Your email" aria-label="Email">
-          <button class="btn btn-primary" type="submit">Subscribe</button>
-        </form>
+          <%= form_with model: Subscriber.new,
+                        url: subscribers_path,
+                        class: "input-group input-group-sm" do |f| %>
+            <%= f.email_field :email,
+                              class: "form-control",
+                              placeholder: "Your email",
+                              aria: { label: "Email" },
+                              required: true %>
+          
+            <%= f.submit "Subscribe", class: "btn btn-primary" %>
+          <% end %>
       </div>
     </div>
 

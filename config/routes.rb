@@ -20,6 +20,7 @@ Rails.application.routes.draw do
 
   resource :registration, only: :create
   resource :profile, only: %i[show edit update]
+  resources :subscribers, only: [ :create ]
 
   namespace :admin do
     get "login", to: "sessions#new", as: "login"
@@ -29,5 +30,6 @@ Rails.application.routes.draw do
     resource :site_configuration, only: [ :show, :edit, :update ]
     resources :roles
     resources :body_types
+    resources :subscribers, only: [ :index ]
   end
 end

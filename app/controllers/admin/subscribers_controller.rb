@@ -1,12 +1,7 @@
 class Admin::SubscribersController < ApplicationController
-  def show
-  end
+  before_action :require_admin!
 
-  def create
-    @subscriber = new Subscriber()
-  end
-
-  def subscriber_params
-    params.require(:subscriber).permit(:email)
+  def index
+    @subscribers = Subscriber.order(created_at: :desc)
   end
 end
