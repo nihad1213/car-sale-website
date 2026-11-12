@@ -13,6 +13,8 @@ permission_names = [
   "update_body_type",
   "read_body_type",
   "delete_body_type",
+  "read_subscribers",
+  "send_message_to_subscribers",
   "manage_site_configuration"
 ]
 
