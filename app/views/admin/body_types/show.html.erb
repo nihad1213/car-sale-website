@@ -26,26 +26,41 @@
 
     <div class="card border-0 shadow-sm">
       <div class="card-header bg-white border-0 pt-3">
-        <h2 class="h6 fw-bold mb-0 text-primary"><i class="bi bi-info-circle me-2"></i>General Information</h2>
+        <h2 class="h6 fw-bold mb-0 text-primary">
+          <i class="bi bi-info-circle me-2"></i>General Information
+        </h2>
       </div>
+
       <div class="card-body">
         <dl class="row mb-0">
           <dt class="col-sm-3">Name</dt>
           <dd class="col-sm-9"><%= @body_type.name %></dd>
-
+          <dt class="col-sm-3">Icon</dt>
+          <dd class="col-sm-9">
+            <% if @body_type.icon.present? %>
+              <i class="<%= @body_type.icon %> fs-4 me-2 text-primary"></i>
+              <code><%= @body_type.icon %></code>
+            <% else %>
+              —
+            <% end %>
+          </dd>
           <dt class="col-sm-3">Vehicles</dt>
           <dd class="col-sm-9"><%= @body_type.vehicles.count %></dd>
 
           <dt class="col-sm-3">Created by</dt>
           <dd class="col-sm-9">
             <%= @body_type.creator&.email || "—" %>
-            <small class="text-muted ms-1"><%= l(@body_type.created_at, format: :short) %></small>
+            <small class="text-muted ms-1">
+              <%= l(@body_type.created_at, format: :short) %>
+            </small>
           </dd>
 
           <dt class="col-sm-3">Last updated by</dt>
           <dd class="col-sm-9 mb-0">
             <%= @body_type.updater&.email || "—" %>
-            <small class="text-muted ms-1"><%= l(@body_type.updated_at, format: :short) %></small>
+            <small class="text-muted ms-1">
+              <%= l(@body_type.updated_at, format: :short) %>
+            </small>
           </dd>
         </dl>
       </div>
