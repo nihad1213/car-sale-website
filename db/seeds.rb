@@ -9,6 +9,10 @@ permission_names = [
   "create_user",
   "update_user",
   "delete_user",
+  "create_body_type",
+  "update_body_type",
+  "read_body_type",
+  "delete_body_type",
   "manage_site_configuration"
 ]
 
