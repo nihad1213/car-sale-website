@@ -55,15 +55,17 @@
   <!-- ============ BROWSE BY BODY TYPE ============ -->
   <section class="py-5">
     <div class="container">
-      <h2 class="h4 fw-bold mb-4">Browse by body type</h2>
+      <h2 class="h4 fw-bold mb-4">Browse by body type</h2>  
       <div class="row row-cols-3 row-cols-md-4 row-cols-lg-7 g-3">
-        <% [["Sedan", "bi-car-front"], ["SUV", "bi-truck-front"], ["Hatchback", "bi-car-front-fill"],
-            ["Coupe", "bi-speedometer2"], ["Wagon", "bi-bus-front"], ["Pickup", "bi-truck"], ["Electric", "bi-lightning-charge"]].each do |name, icon| %>
+        <% body_types.each do |body_type| %>
           <div class="col">
-            <a href="?body_type=<%= name %>" class="card category-tile border text-center text-decoration-none text-body h-100">
+            <a href="?body_type=<%= body_type.name %>"
+               class="card category-tile border text-center text-decoration-none text-body h-100">  
               <div class="card-body py-3">
-                <i class="bi <%= icon %> fs-2 text-primary"></i>
-                <div class="small fw-semibold mt-1"><%= name %></div>
+                <i class="<%= body_type.icon %> fs-2 text-primary"></i> 
+                <div class="small fw-semibold mt-1">
+                  <%= body_type.name %>
+                </div>
               </div>
             </a>
           </div>

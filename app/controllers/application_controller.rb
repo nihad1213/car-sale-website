@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  helper_method :current_user, :site_config
+  helper_method :current_user, :site_config, :body_types
 
   private
 
@@ -15,6 +15,10 @@ class ApplicationController < ActionController::Base
 
   def site_config
     @site_config ||= SiteConfiguration.first_or_create!
+  end
+
+  def body_types
+    @body_types ||= BodyType.order(:name)
   end
 
   def require_login
