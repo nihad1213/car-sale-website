@@ -1,0 +1,64 @@
+<style>
+  trix-editor.form-control { min-height: 320px; }
+  trix-toolbar .trix-button-group { background: #fff; }
+</style>
+
+<%= form_with model: [:admin, blog], local: true, class: "needs-validation" do |f| %>
+  <% if blog.errors.any? %>
+    <div class="alert alert-danger shadow-sm">
+      <h5 class="alert-heading fs-6 fw-bold"><i class="bi bi-exclamation-triangle-fill me-2"></i>Please correct the following errors:</h5>
+      <ul class="mb-0">
+        <% blog.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <!-- General Information -->
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-white border-0 pt-3">
+      <h2 class="h6 fw-bold mb-0 text-primary"><i class="bi bi-info-circle me-2"></i>General Information</h2>
+    </div>
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-12">
+          <%= f.label :header, class: "form-label fw-semibold" %>
+          <%= f.text_field :header, class: "form-control", required: true, maxlength: 150 %>
+        </div>
+
+        <div class="col-md-6">
+          <%= f.label :title_img, "Title image", class: "form-label fw-semibold" %>
+          <%= f.file_field :title_img, class: "form-control", accept: "image/jpeg,image/png,image/webp",
+                data: { preview_target: "blog-img-preview" },
+                onchange: "const f=this.files[0]; const p=document.getElementById('blog-img-preview'); if(f){p.src=URL.createObjectURL(f); p.classList.remove('d-none');}" %>
+          <div class="form-text">JPG, PNG or WebP, up to 5 MB. Recommended ratio 16:9.</div>
+        </div>
+
+        <div class="col-md-6">
+          <% current = blog.persisted? && blog.title_img.attached? %>
+          <%= image_tag (current ? blog.title_img : ""),
+                id: "blog-img-preview",
+                class: "img-fluid rounded border #{'d-none' unless current}",
+                style: "max-height: 180px; object-fit: cover;" %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Description -->
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-white border-0 pt-3">
+      <h2 class="h6 fw-bold mb-0 text-success"><i class="bi bi-journal-richtext me-2"></i>Description</h2>
+    </div>
+    <div class="card-body">
+      <%= f.rich_text_area :description, class: "form-control" %>
+    </div>
+  </div>
+
+  <!-- Submit Action -->
+  <div class="d-flex justify-content-end gap-2 mb-5">
+    <a href="<%= admin_blogs_path %>" class="btn btn-outline-secondary px-4 py-2">Cancel</a>
+    <%= f.submit class: "btn btn-primary px-4 py-2 fw-semibold shadow-sm" %>
+  </div>
+<% end %>

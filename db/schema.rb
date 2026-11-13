@@ -10,9 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_12_045818) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_13_035818) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "action_text_rich_texts", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "body"
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["record_type", "record_id", "name"], name: "index_action_text_rich_texts_uniqueness", unique: true
+  end
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -40,6 +50,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_12_045818) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "blogs", force: :cascade do |t|
+    t.string "header", null: false
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_blogs_on_created_by"
+    t.index ["updated_by"], name: "index_blogs_on_updated_by"
   end
 
   create_table "body_types", force: :cascade do |t|
@@ -151,6 +171,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_12_045818) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "blogs", "users", column: "created_by"
+  add_foreign_key "blogs", "users", column: "updated_by"
   add_foreign_key "users", "roles"
   add_foreign_key "vehicles", "body_types"
   add_foreign_key "vehicles", "places"

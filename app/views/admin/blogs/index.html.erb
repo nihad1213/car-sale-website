@@ -1,0 +1,81 @@
+<div class="d-flex flex-column flex-lg-row min-vh-100 bg-light">
+  <%= render "admin/partials/sidebar" %>
+
+  <main class="flex-grow-1 overflow-x-auto p-3 p-lg-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+      <div>
+        <h1 class="h3 fw-bold mb-0">Blogs</h1>
+        <small class="text-muted">Manage the articles shown on the public site.</small>
+      </div>
+      <a href="<%= new_admin_blog_path %>" class="btn btn-primary btn-sm">
+        <i class="bi bi-plus-lg me-1"></i>New Blog
+      </a>
+    </div>
+
+    <% if notice.present? %>
+      <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i><%= notice %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% end %>
+
+    <% if alert.present? %>
+      <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i><%= alert %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% end %>
+
+    <div class="card border-0 shadow-sm">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th style="width: 90px;">Image</th>
+              <th>Header</th>
+              <th>Excerpt</th>
+              <th>Created</th>
+              <th class="text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @blogs.each do |blog| %>
+              <tr>
+                <td>
+                  <% if blog.title_img.attached? %>
+                    <%= image_tag blog.title_img, class: "rounded", style: "width: 72px; height: 48px; object-fit: cover;" %>
+                  <% else %>
+                    <div class="bg-light border rounded d-flex align-items-center justify-content-center text-muted" style="width: 72px; height: 48px;">
+                      <i class="bi bi-image"></i>
+                    </div>
+                  <% end %>
+                </td>
+                <td class="fw-semibold"><%= blog.header %></td>
+                <td class="text-muted small"><%= truncate(blog.description.to_plain_text, length: 80) %></td>
+                <td class="small text-muted text-nowrap"><%= l(blog.created_at, format: :short) %></td>
+                <td class="text-end text-nowrap">
+                  <a href="<%= admin_blog_path(blog) %>" class="btn btn-outline-secondary btn-sm" aria-label="View">
+                    <i class="bi bi-eye"></i>
+                  </a>
+                  <a href="<%= edit_admin_blog_path(blog) %>" class="btn btn-outline-primary btn-sm" aria-label="Edit">
+                    <i class="bi bi-pencil"></i>
+                  </a>
+                  <%= button_to admin_blog_path(blog), method: :delete,
+                        class: "btn btn-outline-danger btn-sm",
+                        form: { class: "d-inline", data: { turbo_confirm: "Delete this blog?" } } do %>
+                    <i class="bi bi-trash"></i>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+            <% if @blogs.empty? %>
+              <tr>
+                <td colspan="5" class="text-center text-muted py-4">No blogs yet.</td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>

@@ -245,73 +245,29 @@
 
       <div class="row g-4">
         <!-- Article 1 -->
-        <div class="col-md-4">
-          <article class="card h-100 border-0 shadow-sm overflow-hidden">
-            <img src="https://picsum.photos/seed/blog1/600/350" class="card-img-top" alt="Car Maintenance Tips" style="height: 200px; object-fit: cover;">
-            <div class="card-body">
-              <div class="d-flex align-items-center gap-2 small text-muted mb-2">
-                <span class="badge text-bg-light border text-body">Buying Guide</span>
-                <span>&bull;</span>
-                <time datetime="2026-11-01"><i class="bi bi-calendar3 me-1"></i>Nov 1, 2026</time>
+        <% @blogs.each do |blog| %>
+          <div class="col-md-4">
+            <article class="card h-100 border-0 shadow-sm overflow-hidden">
+              <% if blog.title_img.attached? %>
+                <%= image_tag blog.title_img, class: "card-img-top", alt: blog.header, style: "height: 200px; object-fit: cover;" %>
+              <% end %>
+              <div class="card-body">
+                <time class="small text-muted d-block mb-2" datetime="<%= blog.created_at.to_date %>">
+                  <i class="bi bi-calendar3 me-1"></i><%= l(blog.created_at.to_date, format: :long) %>
+                </time>
+                <h3 class="h6 card-title fw-bold mb-2">
+                  <a href="#" class="text-decoration-none text-dark"><%= blog.header %></a>
+                </h3>
+                <p class="card-text text-muted small">
+                  <%= truncate(blog.description.to_plain_text, length: 120) %>
+                </p>
               </div>
-              <h3 class="h6 card-title fw-bold mb-2">
-                <a href="#" class="text-decoration-none text-dark hover-primary">Top 10 Things to Inspect Before Buying a Used Car</a>
-              </h3>
-              <p class="card-text text-muted small">
-                A step-by-step checklist to ensure you don't end up with hidden repairs or mechanical issues.
-              </p>
-            </div>
-            <div class="card-footer bg-white border-0 pt-0 pb-3">
-              <span class="small text-muted"><i class="bi bi-clock me-1"></i>5 min read</span>
-            </div>
-          </article>
-        </div>
-
-        <!-- Article 2 -->
-        <div class="col-md-4">
-          <article class="card h-100 border-0 shadow-sm overflow-hidden">
-            <img src="https://picsum.photos/seed/blog2/600/350" class="card-img-top" alt="Electric Vehicles Market" style="height: 200px; object-fit: cover;">
-            <div class="card-body">
-              <div class="d-flex align-items-center gap-2 small text-muted mb-2">
-                <span class="badge text-bg-light border text-body">EV Market</span>
-                <span>&bull;</span>
-                <time datetime="2026-10-28"><i class="bi bi-calendar3 me-1"></i>Oct 28, 2026</time>
+              <div class="card-footer bg-white border-0 pt-0 pb-3">
+                <span class="small text-muted"><i class="bi bi-clock me-1"></i><%= blog.reading_time %> min read</span>
               </div>
-              <h3 class="h6 card-title fw-bold mb-2">
-                <a href="#" class="text-decoration-none text-dark hover-primary">Are Used EVs Worth It in 2026? Battery Lifespan Breakdown</a>
-              </h3>
-              <p class="card-text text-muted small">
-                Understanding battery degradation, warranty coverage, and resale values for pre-owned electric vehicles.
-              </p>
-            </div>
-            <div class="card-footer bg-white border-0 pt-0 pb-3">
-              <span class="small text-muted"><i class="bi bi-clock me-1"></i>7 min read</span>
-            </div>
-          </article>
-        </div>
-
-        <!-- Article 3 -->
-        <div class="col-md-4">
-          <article class="card h-100 border-0 shadow-sm overflow-hidden">
-            <img src="https://picsum.photos/seed/blog3/600/350" class="card-img-top" alt="Car Selling Tips" style="height: 200px; object-fit: cover;">
-            <div class="card-body">
-              <div class="d-flex align-items-center gap-2 small text-muted mb-2">
-                <span class="badge text-bg-light border text-body">Selling Advice</span>
-                <span>&bull;</span>
-                <time datetime="2026-10-15"><i class="bi bi-calendar3 me-1"></i>Oct 15, 2026</time>
-              </div>
-              <h3 class="h6 card-title fw-bold mb-2">
-                <a href="#" class="text-decoration-none text-dark hover-primary">How to Sell Your Car Online for maximum profit</a>
-              </h3>
-              <p class="card-text text-muted small">
-                Simple steps on taking quality photos, writing convincing descriptions, and negotiating safely with buyers.
-              </p>
-            </div>
-            <div class="card-footer bg-white border-0 pt-0 pb-3">
-              <span class="small text-muted"><i class="bi bi-clock me-1"></i>4 min read</span>
-            </div>
-          </article>
-        </div>
+            </article>
+          </div>
+        <% end %>
       </div>
     </div>
   </section>

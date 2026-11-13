@@ -1,0 +1,67 @@
+<div class="d-flex flex-column flex-lg-row min-vh-100 bg-light">
+  <%= render "admin/partials/sidebar" %>
+
+  <main class="flex-grow-1 overflow-x-auto p-3 p-lg-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+      <div>
+        <h1 class="h3 fw-bold mb-0"><%= @blog.header %></h1>
+        <small class="text-muted">Blog details and content preview.</small>
+      </div>
+      <div class="d-flex gap-2">
+        <a href="<%= admin_blogs_path %>" class="btn btn-outline-secondary btn-sm">
+          <i class="bi bi-arrow-left me-1"></i>Back to Blogs
+        </a>
+        <a href="<%= edit_admin_blog_path(@blog) %>" class="btn btn-primary btn-sm">
+          <i class="bi bi-pencil me-1"></i>Edit
+        </a>
+      </div>
+    </div>
+
+    <% if notice.present? %>
+      <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i><%= notice %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% end %>
+
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-header bg-white border-0 pt-3">
+        <h2 class="h6 fw-bold mb-0 text-primary"><i class="bi bi-info-circle me-2"></i>General Information</h2>
+      </div>
+      <div class="card-body">
+        <% if @blog.title_img.attached? %>
+          <%= image_tag @blog.title_img, class: "img-fluid rounded mb-3", style: "max-height: 280px; object-fit: cover;" %>
+        <% end %>
+
+        <dl class="row mb-0">
+          <dt class="col-sm-3">Header</dt>
+          <dd class="col-sm-9"><%= @blog.header %></dd>
+
+          <dt class="col-sm-3">Reading time</dt>
+          <dd class="col-sm-9"><%= @blog.reading_time %> min read</dd>
+
+          <dt class="col-sm-3">Created by</dt>
+          <dd class="col-sm-9">
+            <%= @blog.creator&.email || "—" %>
+            <small class="text-muted ms-1"><%= l(@blog.created_at, format: :short) %></small>
+          </dd>
+
+          <dt class="col-sm-3">Last updated by</dt>
+          <dd class="col-sm-9 mb-0">
+            <%= @blog.updater&.email || "—" %>
+            <small class="text-muted ms-1"><%= l(@blog.updated_at, format: :short) %></small>
+          </dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-header bg-white border-0 pt-3">
+        <h2 class="h6 fw-bold mb-0 text-success"><i class="bi bi-journal-richtext me-2"></i>Description</h2>
+      </div>
+      <div class="card-body">
+        <%= @blog.description %>
+      </div>
+    </div>
+  </main>
+</div>
