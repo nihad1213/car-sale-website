@@ -3,8 +3,9 @@ class NewsletterMailer < ApplicationMailer
     @message = params[:message]
 
     mail(
-      to: params[:email],
-      subject: params[:subject]
+      to: Rails.application.credentials.dig(:contact, :recipient),
+      reply_to: contact_message.email,
+      subject: "[Contact] #{contact_message.subject}"
     )
   end
 end
