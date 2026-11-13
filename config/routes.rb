@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   resource :profile, only: %i[show edit update]
   resources :subscribers, only: [ :create ]
   resources :blogs, only: %i[index show]
+  resources :contact_messages, only: :create
 
   namespace :admin do
     get "login", to: "sessions#new", as: "login"
@@ -34,5 +35,6 @@ Rails.application.routes.draw do
     resources :subscribers, only: [ :index ]
     resources :newsletters, only: [ :new, :create ]
     resources :blogs
+    resources :contact_messages, only: %i[index show destroy]
   end
 end

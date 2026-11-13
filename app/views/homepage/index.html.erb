@@ -197,34 +197,7 @@
         <div class="col-lg-7">
           <div class="card border-0 shadow-sm h-100">
             <div class="card-body p-4">
-              <%= form_with url: "#", method: :post, class: "row g-3" do %>
-                <div class="col-md-6">
-                  <label for="contact_name" class="form-label small fw-semibold">Your name</label>
-                  <input type="text" id="contact_name" name="name" class="form-control" required>
-                </div>
-                <div class="col-md-6">
-                  <label for="contact_email" class="form-label small fw-semibold">Email</label>
-                  <input type="email" id="contact_email" name="email" class="form-control" required>
-                </div>
-                <div class="col-12">
-                  <label for="contact_subject" class="form-label small fw-semibold">Subject</label>
-                  <select id="contact_subject" name="subject" class="form-select">
-                    <option>General question</option>
-                    <option>Question about a listing</option>
-                    <option>Selling my car</option>
-                    <option>Report a problem</option>
-                  </select>
-                </div>
-                <div class="col-12">
-                  <label for="contact_message" class="form-label small fw-semibold">Message</label>
-                  <textarea id="contact_message" name="message" rows="5" class="form-control" required></textarea>
-                </div>
-                <div class="col-12">
-                  <button type="submit" class="btn btn-primary px-4">
-                    <i class="bi bi-send me-1"></i>Send message
-                  </button>
-                </div>
-              <% end %>
+              <%= render "contact_messages/form", contact_message: @contact_message || ContactMessage.new %>
             </div>
           </div>
         </div>

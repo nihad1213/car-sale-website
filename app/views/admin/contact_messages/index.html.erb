@@ -1,0 +1,62 @@
+<div class="d-flex flex-column flex-lg-row min-vh-100 bg-light">
+  <%= render "admin/partials/sidebar" %>
+
+  <main class="flex-grow-1 overflow-x-auto p-3 p-lg-4">
+    <div class="mb-4">
+      <h1 class="h3 fw-bold mb-0">Messages</h1>
+      <small class="text-muted">Messages sent through the contact form.</small>
+    </div>
+
+    <% if notice.present? %>
+      <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i><%= notice %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% end %>
+
+    <div class="card border-0 shadow-sm">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>From</th>
+              <th>Subject</th>
+              <th>Message</th>
+              <th>Received</th>
+              <th class="text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @contact_messages.each do |cm| %>
+              <tr class="<%= 'fw-semibold' unless cm.read? %>">
+                <td>
+                  <% unless cm.read? %><span class="badge text-bg-primary me-1">New</span><% end %>
+                  <%= cm.name %>
+                  <div class="small text-muted fw-normal"><%= cm.email %></div>
+                </td>
+                <td><%= cm.subject %></td>
+                <td class="text-muted small fw-normal"><%= truncate(cm.message, length: 70) %></td>
+                <td class="small text-muted text-nowrap fw-normal"><%= l(cm.created_at, format: :short) %></td>
+                <td class="text-end text-nowrap">
+                  <a href="<%= admin_contact_message_path(cm) %>" class="btn btn-outline-secondary btn-sm" aria-label="View">
+                    <i class="bi bi-eye"></i>
+                  </a>
+                  <%= button_to admin_contact_message_path(cm), method: :delete,
+                        class: "btn btn-outline-danger btn-sm",
+                        form: { class: "d-inline", data: { turbo_confirm: "Delete this message?" } } do %>
+                    <i class="bi bi-trash"></i>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+            <% if @contact_messages.empty? %>
+              <tr>
+                <td colspan="5" class="text-center text-muted py-4">No messages yet.</td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
