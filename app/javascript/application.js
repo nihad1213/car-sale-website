@@ -1,6 +1,8 @@
 import "@hotwired/turbo-rails"
 import "controllers"
 import * as bootstrap from "bootstrap"
+import "trix"
+import "@rails/actiontext"
 
 function openAuthModalIfNeeded() {
   const el = document.getElementById("authModal");
@@ -27,3 +29,5 @@ document.addEventListener("turbo:before-cache", () => {
   document.body.style.removeProperty("overflow");
   document.body.style.removeProperty("padding-right");
 });
+import "trix"
+import "@rails/actiontext"
