@@ -15,7 +15,11 @@ permission_names = [
   "delete_body_type",
   "read_subscribers",
   "send_message_to_subscribers",
-  "manage_site_configuration"
+  "manage_site_configuration",
+  "create_blog",
+  "read_blog",
+  "update_blog",
+  "delete_blog"
 ]
 
 permissions = permission_names.map do |perm_name|
