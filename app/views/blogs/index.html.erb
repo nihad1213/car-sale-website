@@ -1,8 +1,13 @@
 <section class="bg-light py-5">
   <div class="container">
-    <div class="mb-4">
-      <h1 class="h3 fw-bold mb-1">Blog</h1>
-      <p class="text-muted small mb-0">Buying guides, market trends, and maintenance tips.</p>
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+      <div>
+        <h1 class="h3 fw-bold mb-1">Blog</h1>
+        <p class="text-muted small mb-0">Buying guides, market trends, and maintenance tips.</p>
+      </div>
+      <%= link_to root_path, class: "btn btn-outline-secondary btn-sm" do %>
+        <i class="bi bi-arrow-left me-1"></i>Back to Home
+      <% end %>
     </div>
 
     <div class="row g-4">
