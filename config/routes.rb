@@ -23,6 +23,12 @@ Rails.application.routes.draw do
   resources :subscribers, only: [ :create ]
   resources :blogs, only: %i[index show]
   resources :contact_messages, only: :create
+  resources :favorites, only: :index
+
+  resources :vehicles do
+    collection { get :mine }
+    resource :favorite, only: %i[create destroy]
+  end
 
   namespace :admin do
     get "login", to: "sessions#new", as: "login"
