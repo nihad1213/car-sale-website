@@ -1,0 +1,19 @@
+<section class="bg-light py-5">
+  <div class="container">
+    <div class="mb-4">
+      <h1 class="h3 fw-bold mb-1">Blog</h1>
+      <p class="text-muted small mb-0">Buying guides, market trends, and maintenance tips.</p>
+    </div>
+
+    <div class="row g-4">
+      <% @blogs.each do |blog| %>
+        <div class="col-md-6 col-lg-4">
+          <%= render "homepage/partials/single_blog", blog: blog %>
+        </div>
+      <% end %>
+      <% if @blogs.empty? %>
+        <p class="text-muted text-center py-5">No articles yet.</p>
+      <% end %>
+    </div>
+  </div>
+</section>

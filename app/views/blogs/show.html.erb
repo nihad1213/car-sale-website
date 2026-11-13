@@ -1,0 +1,44 @@
+<section class="py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <a href="<%= blogs_path %>" class="btn btn-outline-secondary btn-sm mb-4">
+          <i class="bi bi-arrow-left me-1"></i>All articles
+        </a>
+
+        <h1 class="fw-bold mb-3"><%= @blog.header %></h1>
+
+        <div class="d-flex flex-wrap gap-3 small text-muted mb-4">
+          <time datetime="<%= @blog.created_at.to_date %>">
+            <i class="bi bi-calendar3 me-1"></i><%= l(@blog.created_at.to_date, format: :long) %>
+          </time>
+          <span><i class="bi bi-clock me-1"></i><%= @blog.reading_time %> min read</span>
+        </div>
+
+        <% if @blog.title_img.attached? %>
+          <%= image_tag @blog.title_img, class: "img-fluid rounded shadow-sm mb-4 w-100",
+                alt: @blog.header, style: "max-height: 460px; object-fit: cover;" %>
+        <% end %>
+
+        <div class="fs-5 lh-lg">
+          <%= @blog.description %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<% if @related_blogs.any? %>
+  <section class="bg-light py-5">
+    <div class="container">
+      <h2 class="h5 fw-bold mb-4">More articles</h2>
+      <div class="row g-4">
+        <% @related_blogs.each do |blog| %>
+          <div class="col-md-4">
+            <%= render "homepage/partials/single_blog", blog: blog %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </section>
+<% end %>

@@ -1,0 +1,23 @@
+<% if blogs.any? %>
+  <section class="bg-light py-5">
+    <div class="container">
+      <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+        <div>
+          <h2 class="h4 fw-bold mb-1">Latest from <%= site_config.site_name %> Blog</h2>
+          <p class="text-muted small mb-0">Buying guides, market trends, and maintenance tips.</p>
+        </div>
+        <%= link_to blogs_path, class: "btn btn-outline-primary btn-sm" do %>
+          View all articles <i class="bi bi-arrow-right ms-1"></i>
+        <% end %>
+      </div>
+
+      <div class="row g-4">
+        <% blogs.each do |blog| %>
+          <div class="col-md-4">
+            <%= render "homepage/partials/single_blog", blog: blog %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </section>
+<% end %>

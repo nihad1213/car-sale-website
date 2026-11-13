@@ -1,0 +1,24 @@
+<article class="card h-100 border-0 shadow-sm overflow-hidden">
+  <% if blog.title_img.attached? %>
+    <%= link_to blog_path(blog) do %>
+      <%= image_tag blog.title_img, class: "card-img-top", alt: blog.header,
+            style: "height: 200px; object-fit: cover;" %>
+    <% end %>
+  <% end %>
+
+  <div class="card-body">
+    <time class="small text-muted d-block mb-2" datetime="<%= blog.created_at.to_date %>">
+      <i class="bi bi-calendar3 me-1"></i><%= l(blog.created_at.to_date, format: :long) %>
+    </time>
+    <h3 class="h6 card-title fw-bold mb-2">
+      <%= link_to blog.header, blog_path(blog), class: "text-decoration-none text-dark stretched-link" %>
+    </h3>
+    <p class="card-text text-muted small">
+      <%= truncate(blog.description.to_plain_text, length: 120) %>
+    </p>
+  </div>
+
+  <div class="card-footer bg-white border-0 pt-0 pb-3">
+    <span class="small text-muted"><i class="bi bi-clock me-1"></i><%= blog.reading_time %> min read</span>
+  </div>
+</article>

@@ -235,38 +235,19 @@
   <!-- ============ LATEST NEWS & BLOGS ============ -->
   <section class="bg-light py-5">
     <div class="container">
-      <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
-        <div>
-          <h2 class="h4 fw-bold mb-1">Latest from <%= site_config.site_name %> Blog</h2>
-          <p class="text-muted small mb-0">Buying guides, market trends, and maintenance tips.</p>
-        </div>
-        <a href="#" class="btn btn-outline-primary btn-sm">View all articles <i class="bi bi-arrow-right ms-1"></i></a>
+      <div class="mb-4">
+        <h1 class="h3 fw-bold mb-1">Blog</h1>
+        <p class="text-muted small mb-0">Buying guides, market trends, and maintenance tips.</p>
       </div>
-
+  
       <div class="row g-4">
-        <!-- Article 1 -->
         <% @blogs.each do |blog| %>
-          <div class="col-md-4">
-            <article class="card h-100 border-0 shadow-sm overflow-hidden">
-              <% if blog.title_img.attached? %>
-                <%= image_tag blog.title_img, class: "card-img-top", alt: blog.header, style: "height: 200px; object-fit: cover;" %>
-              <% end %>
-              <div class="card-body">
-                <time class="small text-muted d-block mb-2" datetime="<%= blog.created_at.to_date %>">
-                  <i class="bi bi-calendar3 me-1"></i><%= l(blog.created_at.to_date, format: :long) %>
-                </time>
-                <h3 class="h6 card-title fw-bold mb-2">
-                  <a href="#" class="text-decoration-none text-dark"><%= blog.header %></a>
-                </h3>
-                <p class="card-text text-muted small">
-                  <%= truncate(blog.description.to_plain_text, length: 120) %>
-                </p>
-              </div>
-              <div class="card-footer bg-white border-0 pt-0 pb-3">
-                <span class="small text-muted"><i class="bi bi-clock me-1"></i><%= blog.reading_time %> min read</span>
-              </div>
-            </article>
+          <div class="col-md-6 col-lg-4">
+            <%= render "homepage/partials/single_blog", blog: blog %>
           </div>
+        <% end %>
+        <% if @blogs.empty? %>
+          <p class="text-muted text-center py-5">No articles yet.</p>
         <% end %>
       </div>
     </div>
