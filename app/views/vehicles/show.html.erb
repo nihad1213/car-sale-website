@@ -1,0 +1,68 @@
+<%= render "homepage/partials/header" %>
+
+<section class="py-5">
+  <div class="container">
+    <% if notice.present? %>
+      <div class="alert alert-success shadow-sm"><%= notice %></div>
+    <% end %>
+
+    <%= link_to root_path, class: "btn btn-outline-secondary btn-sm mb-4" do %>
+      <i class="bi bi-arrow-left me-1"></i>All cars
+    <% end %>
+
+    <div class="row g-4">
+      <div class="col-lg-7">
+        <div id="vehicleCarousel" class="carousel slide shadow-sm rounded overflow-hidden position-relative">
+          <div class="carousel-inner">
+            <% @vehicle.pics.each_with_index do |pic, i| %>
+              <div class="carousel-item <%= 'active' if i.zero? %>">
+                <%= image_tag pic, class: "d-block w-100", alt: @vehicle.title, style: "max-height: 460px; object-fit: cover;" %>
+              </div>
+            <% end %>
+          </div>
+          <% if @vehicle.pics.size > 1 %>
+            <button class="carousel-control-prev" type="button" data-bs-target="#vehicleCarousel" data-bs-slide="prev" aria-label="Previous">
+              <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#vehicleCarousel" data-bs-slide="next" aria-label="Next">
+              <span class="carousel-control-next-icon"></span>
+            </button>
+          <% end %>
+          <%= render "favorites/button", vehicle: @vehicle, favorite_ids: @favorite_ids %>
+        </div>
+      </div>
+
+      <div class="col-lg-5">
+        <h1 class="h3 fw-bold"><%= @vehicle.title %></h1>
+        <p class="text-muted"><i class="bi bi-geo-alt me-1"></i><%= @vehicle.place.name %></p>
+        <p class="display-6 fw-bold text-primary"><%= number_to_currency(@vehicle.price, precision: 0) %></p>
+
+        <dl class="row small">
+          <dt class="col-5">Make / model</dt><dd class="col-7"><%= [@vehicle.make, @vehicle.model].compact_blank.join(" ") %></dd>
+          <dt class="col-5">Year</dt><dd class="col-7"><%= @vehicle.year %></dd>
+          <dt class="col-5">Body type</dt><dd class="col-7"><%= @vehicle.body_type.name %></dd>
+          <dt class="col-5">Mileage</dt><dd class="col-7"><%= number_with_delimiter(@vehicle.mileage.to_i) %> km</dd>
+          <dt class="col-5">Fuel</dt><dd class="col-7"><%= @vehicle.fuel.presence || "—" %></dd>
+          <dt class="col-5">Transmission</dt><dd class="col-7"><%= @vehicle.transmission.presence || "—" %></dd>
+        </dl>
+
+        <% if current_user && (current_user.admin? || @vehicle.created_by == current_user.id) %>
+          <div class="d-flex gap-2">
+            <%= link_to "Edit", edit_vehicle_path(@vehicle), class: "btn btn-outline-primary btn-sm" %>
+            <%= button_to "Delete", vehicle_path(@vehicle), method: :delete, class: "btn btn-outline-danger btn-sm",
+                  form: { class: "m-0", data: { turbo_confirm: "Delete this listing?" } } %>
+          </div>
+        <% end %>
+      </div>
+
+      <% if @vehicle.description.present? %>
+        <div class="col-12">
+          <h2 class="h6 fw-bold">Description</h2>
+          <%= simple_format(h(@vehicle.description)) %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<%= render "homepage/partials/footer" %>

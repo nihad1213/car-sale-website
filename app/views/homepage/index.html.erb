@@ -55,21 +55,28 @@
   <!-- ============ BROWSE BY BODY TYPE ============ -->
   <section class="py-5">
     <div class="container">
-      <h2 class="h4 fw-bold mb-4">Browse by body type</h2>  
-      <div class="row row-cols-3 row-cols-md-4 row-cols-lg-7 g-3">
-        <% body_types.each do |body_type| %>
-          <div class="col">
-            <a href="?body_type=<%= body_type.name %>"
-               class="card category-tile border text-center text-decoration-none text-body h-100">  
-              <div class="card-body py-3">
-                <i class="<%= body_type.icon %> fs-2 text-primary"></i> 
-                <div class="small fw-semibold mt-1">
-                  <%= body_type.name %>
-                </div>
-              </div>
-            </a>
-          </div>
+      <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="h4 fw-bold mb-0">Browse by body type</h2>
+      <% if params[:body_type].present? %>
+        <%= link_to root_path(anchor: "listings"), class: "btn btn-outline-secondary btn-sm" do %>
+          <i class="bi bi-x-lg me-1"></i>Clear
         <% end %>
+      <% end %>
+      </div>
+      <div class="row row-cols-3 row-cols-md-4 row-cols-lg-7 g-3">
+      <% body_types.each do |body_type| %>
+        <% active = params[:body_type] == body_type.name %>
+        <div class="col">
+          <%= link_to root_path(**request.query_parameters.symbolize_keys.except(:page),
+                                body_type: (active ? nil : body_type.name), anchor: "listings"),
+                class: "card category-tile border text-center text-decoration-none text-body h-100 #{'border-primary border-2 shadow-sm' if active}" do %>
+            <div class="card-body py-3">
+              <i class="<%= body_type.icon %> fs-2 text-primary"></i>
+              <div class="small fw-semibold mt-1"><%= body_type.name %></div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
       </div>
     </div>
   </section>
@@ -79,67 +86,56 @@
     <div class="container">
       <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
         <div>
-          <h2 class="h4 fw-bold mb-0">Latest listings</h2>
-          <small class="text-muted"><%= cars.size %> cars found</small>
+        <h2 class="h4 fw-bold mb-0">
+          <%= params[:body_type].present? ? "#{params[:body_type]} listings" : "Latest listings" %>
+        </h2>
+        <small class="text-muted"><%= pluralize(@total, "car") %> found</small>
         </div>
         <div class="d-flex align-items-center gap-2">
           <label for="sort" class="small text-muted mb-0">Sort by</label>
-          <select id="sort" name="sort" class="form-select form-select-sm w-auto">
-            <option>Newest first</option>
-            <option>Price: low to high</option>
-            <option>Price: high to low</option>
-            <option>Year: newest</option>
-            <option>Mileage: lowest</option>
+        <select id="sort" class="form-select form-select-sm w-auto"
+                onchange="const u = new URL(window.location); u.searchParams.set('sort', this.value); u.searchParams.delete('page'); u.hash = 'listings'; window.location = u;">
+            <% { "newest" => "Newest first", "price_asc" => "Price: low to high", "price_desc" => "Price: high to low",
+                 "year_desc" => "Year: newest", "mileage" => "Mileage: lowest" }.each do |value, label| %>
+              <option value="<%= value %>" <%= "selected" if params[:sort] == value %>><%= label %></option>
+            <% end %>
           </select>
         </div>
       </div>
-
-      <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4">
-        <% cars.each do |car| %>
+  
+      <% if @vehicles.any? %>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4">
+        <% @vehicles.each do |vehicle| %>
           <div class="col">
-            <div class="card car-card h-100 border-0 shadow-sm">
-              <div class="position-relative">
-                <img src="https://picsum.photos/seed/car<%= car[:id] %>/600/400"
-                     class="card-img-top car-img" alt="<%= car[:title] %>" loading="lazy">
-                <% if car[:badge] %>
-                  <span class="badge text-bg-primary car-badge"><%= car[:badge] %></span>
-                <% end %>
-                <button type="button" class="btn btn-light fav-btn shadow-sm" aria-label="Save to favorites">
-                  <i class="bi bi-heart"></i>
-                </button>
-              </div>
-
-              <div class="card-body">
-                <h3 class="h6 card-title mb-1"><%= car[:title] %></h3>
-                <p class="text-muted small mb-2"><i class="bi bi-geo-alt me-1"></i><%= car[:location] %></p>
-                <p class="fs-5 fw-bold text-primary mb-3"><%= number_to_currency(car[:price], precision: 0) %></p>
-
-                <ul class="list-unstyled small text-muted mb-0 row row-cols-2 g-1">
-                  <li class="col"><i class="bi bi-calendar3 me-1"></i><%= car[:year] %></li>
-                  <li class="col"><i class="bi bi-speedometer me-1"></i><%= number_with_delimiter(car[:mileage]) %> km</li>
-                  <li class="col"><i class="bi bi-fuel-pump me-1"></i><%= car[:fuel] %></li>
-                  <li class="col"><i class="bi bi-gear-wide-connected me-1"></i><%= car[:transmission] %></li>
-                </ul>
-              </div>
-
-              <div class="card-footer bg-white border-0 pt-0 pb-3">
-                <a href="#" class="btn btn-outline-primary btn-sm w-100">View details</a>
-              </div>
-            </div>
+            <%= render "homepage/partials/vehicle_card", vehicle: vehicle, favorite_ids: @favorite_ids %>
           </div>
         <% end %>
-      </div>
-
-      <!-- Pagination -->
-      <nav class="mt-5" aria-label="Listings pagination">
-        <ul class="pagination justify-content-center">
-          <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-          <li class="page-item active"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item"><a class="page-link" href="#">Next</a></li>
-        </ul>
-      </nav>
+        </div>
+      <% else %>
+        <div class="text-center text-muted py-5">
+          <i class="bi bi-car-front fs-1 d-block mb-2"></i>
+          No cars match these filters.
+        </div>
+      <% end %>
+  
+      <% if @total_pages > 1 %>
+        <nav class="mt-5" aria-label="Listings pagination">
+          <ul class="pagination justify-content-center">
+            <% base = request.query_parameters.symbolize_keys %>
+            <li class="page-item <%= 'disabled' if @page <= 1 %>">
+              <%= link_to "Previous", root_path(**base, page: @page - 1, anchor: "listings"), class: "page-link" %>
+            </li>
+            <% (1..@total_pages).each do |n| %>
+              <li class="page-item <%= 'active' if n == @page %>">
+                <%= link_to n, root_path(**base, page: n, anchor: "listings"), class: "page-link" %>
+              </li>
+            <% end %>
+            <li class="page-item <%= 'disabled' if @page >= @total_pages %>">
+              <%= link_to "Next", root_path(**base, page: @page + 1, anchor: "listings"), class: "page-link" %>
+            </li>
+          </ul>
+        </nav>
+      <% end %>
     </div>
   </section>
 

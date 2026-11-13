@@ -1,0 +1,11 @@
+<%= render "homepage/partials/header" %>
+
+<section class="bg-light py-5">
+  <div class="container" style="max-width: 860px;">
+    <h1 class="h3 fw-bold mb-1">Sell your car</h1>
+    <p class="text-muted small mb-4">Fill in the details and add photos to publish your listing.</p>
+    <%= render "form", vehicle: @vehicle %>
+  </div>
+</section>
+
+<%= render "homepage/partials/footer" %>

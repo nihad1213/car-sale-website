@@ -1,0 +1,26 @@
+<%= render "homepage/partials/header" %>
+
+<section class="bg-light py-5">
+  <div class="container">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+      <div>
+        <h1 class="h3 fw-bold mb-1">Saved cars</h1>
+        <p class="text-muted small mb-0"><%= pluralize(@vehicles.size, "car") %> saved</p>
+      </div>
+      <%= link_to root_path, class: "btn btn-outline-secondary btn-sm" do %>
+        <i class="bi bi-arrow-left me-1"></i>Back to Home
+      <% end %>
+    </div>
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4">
+      <% @vehicles.each do |vehicle| %>
+        <div class="col"><%= render "homepage/partials/vehicle_card", vehicle: vehicle, favorite_ids: @favorite_ids %></div>
+      <% end %>
+    </div>
+    <% if @vehicles.empty? %>
+      <p class="text-muted text-center py-5">You haven't saved any cars yet.</p>
+    <% end %>
+  </div>
+</section>
+
+<%= render "homepage/partials/footer" %>

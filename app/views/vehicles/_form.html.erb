@@ -1,0 +1,72 @@
+<%= form_with model: vehicle, local: true do |f| %>
+  <% if vehicle.errors.any? %>
+    <div class="alert alert-danger shadow-sm">
+      <ul class="mb-0 small">
+        <% vehicle.errors.full_messages.each do |msg| %><li><%= msg %></li><% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-body p-4">
+      <div class="row g-3">
+        <div class="col-12">
+          <%= f.label :title, class: "form-label fw-semibold" %>
+          <%= f.text_field :title, class: "form-control", required: true, maxlength: 120,
+                placeholder: "e.g. 2021 BMW 3 Series 320i" %>
+        </div>
+        <div class="col-md-4">
+          <%= f.label :make, class: "form-label fw-semibold" %>
+          <%= f.text_field :make, class: "form-control", required: true %>
+        </div>
+        <div class="col-md-4">
+          <%= f.label :model, class: "form-label fw-semibold" %>
+          <%= f.text_field :model, class: "form-control" %>
+        </div>
+        <div class="col-md-4">
+          <%= f.label :year, class: "form-label fw-semibold" %>
+          <%= f.number_field :year, class: "form-control", required: true, min: 1950, max: Date.current.year + 1 %>
+        </div>
+        <div class="col-md-4">
+          <%= f.label :body_type_id, "Body type", class: "form-label fw-semibold" %>
+          <%= f.collection_select :body_type_id, @body_types, :id, :name, { prompt: "Select…" },
+                { class: "form-select", required: true } %>
+        </div>
+
+        <div class="col-md-4">
+          <%= f.label :price, "Price ($)", class: "form-label fw-semibold" %>
+          <%= f.number_field :price, class: "form-control", required: true, min: 0, step: 100 %>
+        </div>
+        <div class="col-md-4">
+          <%= f.label :mileage, "Mileage (km)", class: "form-label fw-semibold" %>
+          <%= f.number_field :mileage, class: "form-control", min: 0 %>
+        </div>
+        <div class="col-md-4">
+          <%= f.label :fuel, class: "form-label fw-semibold" %>
+          <%= f.select :fuel, Vehicle::FUELS, { include_blank: "Select…" }, class: "form-select" %>
+        </div>
+        <div class="col-md-4">
+          <%= f.label :transmission, class: "form-label fw-semibold" %>
+          <%= f.select :transmission, Vehicle::TRANSMISSIONS, { include_blank: "Select…" }, class: "form-select" %>
+        </div>
+        <div class="col-12">
+          <%= f.label :description, class: "form-label fw-semibold" %>
+          <%= f.text_area :description, rows: 5, class: "form-control" %>
+        </div>
+        <div class="col-12">
+          <%= f.label :pics, "Photos (1–12)", class: "form-label fw-semibold" %>
+          <%= f.file_field :pics, multiple: true, accept: "image/jpeg,image/png,image/webp", class: "form-control" %>
+          <div class="form-text">
+            JPG, PNG or WebP, up to 5 MB each.
+            <% if vehicle.persisted? %>Uploading new photos replaces the current ones.<% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-end gap-2 mb-5">
+    <%= link_to "Cancel", mine_vehicles_path, class: "btn btn-outline-secondary px-4" %>
+    <%= f.submit class: "btn btn-primary px-4 fw-semibold" %>
+  </div>
+<% end %>

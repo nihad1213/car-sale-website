@@ -1,0 +1,18 @@
+<div id="<%= dom_id(vehicle, :favorite) %>">
+  <% if current_user.nil? %>
+    <button type="button" class="btn btn-light fav-btn shadow-sm" aria-label="Sign in to save"
+            data-bs-toggle="modal" data-bs-target="#authModal">
+      <i class="bi bi-heart"></i>
+    </button>
+  <% elsif favorite_ids.include?(vehicle.id) %>
+    <%= button_to vehicle_favorite_path(vehicle), method: :delete,
+          class: "btn btn-light fav-btn shadow-sm", form: { class: "m-0" }, aria: { label: "Remove from saved" } do %>
+      <i class="bi bi-heart-fill text-danger"></i>
+    <% end %>
+  <% else %>
+    <%= button_to vehicle_favorite_path(vehicle), method: :post,
+          class: "btn btn-light fav-btn shadow-sm", form: { class: "m-0" }, aria: { label: "Save car" } do %>
+      <i class="bi bi-heart"></i>
+    <% end %>
+  <% end %>
+</div>
