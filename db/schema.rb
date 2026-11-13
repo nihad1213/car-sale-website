@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_13_053743) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_13_053908) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -80,6 +80,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_13_053743) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["read_at"], name: "index_contact_messages_on_read_at"
+  end
+
+  create_table "favorites", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "vehicle_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "vehicle_id"], name: "index_favorites_on_user_id_and_vehicle_id", unique: true
+    t.index ["user_id"], name: "index_favorites_on_user_id"
+    t.index ["vehicle_id"], name: "index_favorites_on_vehicle_id"
   end
 
   create_table "permissions", force: :cascade do |t|
@@ -188,6 +198,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_13_053743) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "blogs", "users", column: "created_by"
   add_foreign_key "blogs", "users", column: "updated_by"
+  add_foreign_key "favorites", "users"
+  add_foreign_key "favorites", "vehicles"
   add_foreign_key "users", "roles"
   add_foreign_key "vehicles", "body_types"
   add_foreign_key "vehicles", "places"
