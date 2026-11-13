@@ -21,6 +21,7 @@ Rails.application.routes.draw do
   resource :registration, only: :create
   resource :profile, only: %i[show edit update]
   resources :subscribers, only: [ :create ]
+  resources :blogs, only: %i[index show]
 
   namespace :admin do
     get "login", to: "sessions#new", as: "login"
