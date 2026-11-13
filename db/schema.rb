@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_13_043403) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_13_053743) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -176,8 +176,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_13_043403) do
     t.integer "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "model"
     t.index ["body_type_id"], name: "index_vehicles_on_body_type_id"
+    t.index ["make"], name: "index_vehicles_on_make"
     t.index ["place_id"], name: "index_vehicles_on_place_id"
+    t.index ["price"], name: "index_vehicles_on_price"
+    t.index ["year"], name: "index_vehicles_on_year"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
