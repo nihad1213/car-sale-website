@@ -32,5 +32,6 @@ Rails.application.routes.draw do
     resources :body_types
     resources :subscribers, only: [ :index ]
     resources :newsletters, only: [ :new, :create ]
+    resources :blogs
   end
 end
