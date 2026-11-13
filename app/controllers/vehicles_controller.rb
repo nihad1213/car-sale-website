@@ -4,12 +4,12 @@ class VehiclesController < ApplicationController
   before_action :load_form_options, only: %i[new create edit update]
 
   def show
-    @vehicle = Vehicle.with_attached_pics.includes(:body_type).find(params[:id])
+    @vehicle = Vehicle.with_attached_pics.includes(:body_type, :place).find(params[:id])
     @favorite_ids = current_user ? current_user.favorites.pluck(:vehicle_id) : []
   end
 
   def mine
-    @vehicles = Vehicle.where(created_by: current_user.id).with_attached_pics.order(created_at: :desc)
+    @vehicles = Vehicle.where(created_by: current_user.id).includes(:place).with_attached_pics.order(created_at: :desc)
     @favorite_ids = current_user.favorites.pluck(:vehicle_id)
   end
 
@@ -56,12 +56,13 @@ class VehiclesController < ApplicationController
 
   def load_form_options
     @body_types = BodyType.order(:name)
+    @places = Place.order(:name)
   end
 
   def vehicle_params
     permitted = params.require(:vehicle).permit(
       :title, :make, :model, :year, :price, :mileage, :fuel, :transmission,
-      :description, :body_type_id, pics: []
+      :description, :body_type_id, :place_id, pics: []
     )
     permitted[:pics] = permitted[:pics].compact_blank if permitted.key?(:pics)
     permitted.delete(:pics) if permitted[:pics].blank? && @vehicle&.persisted?

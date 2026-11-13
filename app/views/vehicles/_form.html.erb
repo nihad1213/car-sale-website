@@ -32,7 +32,11 @@
           <%= f.collection_select :body_type_id, @body_types, :id, :name, { prompt: "Select…" },
                 { class: "form-select", required: true } %>
         </div>
-
+        <div class="col-md-4">
+          <%= f.label :place_id, "Location", class: "form-label fw-semibold" %>
+          <%= f.collection_select :place_id, @places, :id, :name, { prompt: "Select…" },
+                { class: "form-select", required: true } %>
+        </div>
         <div class="col-md-4">
           <%= f.label :price, "Price ($)", class: "form-label fw-semibold" %>
           <%= f.number_field :price, class: "form-control", required: true, min: 0, step: 100 %>

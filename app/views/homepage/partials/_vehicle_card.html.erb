@@ -1,0 +1,32 @@
+<div class="card car-card h-100 border-0 shadow-sm">
+  <div class="position-relative">
+    <% if vehicle.pics.attached? %>
+      <%= link_to vehicle_path(vehicle) do %>
+        <%= image_tag vehicle.pics.first, class: "card-img-top car-img", alt: vehicle.title, loading: "lazy" %>
+      <% end %>
+    <% end %>
+
+    <% if vehicle.created_at > 7.days.ago %>
+      <span class="badge text-bg-primary car-badge">New</span>
+    <% end %>
+
+    <%= render "favorites/button", vehicle: vehicle, favorite_ids: favorite_ids %>
+  </div>
+
+  <div class="card-body">
+    <h3 class="h6 card-title mb-1"><%= vehicle.title %></h3>
+    <p class="text-muted small mb-2"><i class="bi bi-geo-alt me-1"></i><%= vehicle.place.name %></p>
+    <p class="fs-5 fw-bold text-primary mb-3"><%= number_to_currency(vehicle.price, precision: 0) %></p>
+
+    <ul class="list-unstyled small text-muted mb-0 row row-cols-2 g-1">
+      <li class="col"><i class="bi bi-calendar3 me-1"></i><%= vehicle.year %></li>
+      <li class="col"><i class="bi bi-speedometer me-1"></i><%= number_with_delimiter(vehicle.mileage.to_i) %> km</li>
+      <li class="col"><i class="bi bi-fuel-pump me-1"></i><%= vehicle.fuel.presence || "—" %></li>
+      <li class="col"><i class="bi bi-gear-wide-connected me-1"></i><%= vehicle.transmission.presence || "—" %></li>
+    </ul>
+  </div>
+
+  <div class="card-footer bg-white border-0 pt-0 pb-3">
+    <%= link_to "View details", vehicle_path(vehicle), class: "btn btn-outline-primary btn-sm w-100" %>
+  </div>
+</div>

@@ -60,4 +60,21 @@ regular_user = User.find_or_create_by!(email: "user@carwebsite.com") do |user|
 end
 puts "Regular user ready: #{regular_user.email} (Password: password123)"
 
+# 6. Create Places
+place_names = [
+  "London",
+  "USA",
+  "Berlin",
+  "Tokyo",
+  "Sydney"
+]
+
+places = place_names.map do |place_name|
+  Place.find_or_create_by!(name: place_name) do |place|
+    place.created_by = admin_user.id
+    place.updated_by = admin_user.id
+  end
+end
+puts "Created/Verified #{places.count} places: #{place_names.join(', ')}"
+
 puts "Seeding finished successfully!"
