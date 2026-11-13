@@ -10,6 +10,9 @@ class User < ApplicationRecord
   has_many :body_types, foreign_key: "created_by", dependent: :nullify
   has_many :places, foreign_key: "created_by", dependent: :nullify
 
+  has_many :favorites, dependent: :destroy
+  has_many :favorite_vehicles, through: :favorites, source: :vehicle
+
   def admin?
     role&.name == "Admin"
   end
